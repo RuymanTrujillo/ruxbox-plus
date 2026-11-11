@@ -1,0 +1,1 @@
+(()=>{let t='system';try{const v=localStorage.getItem('rearouter_theme');if(['light','dark','system'].includes(v))t=v;}catch{}document.documentElement.dataset.theme=(t==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):t);document.documentElement.dataset.themePreference=t;})();

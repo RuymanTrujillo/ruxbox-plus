@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <script src="/theme.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#181818">
+  <title>RuxBox+ · Gestión avanzada de Livebox</title>
+  <link rel="icon" href="/ruxbox-plus-favicon.png" sizes="64x64" type="image/png">
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.js"></script>
+  <link rel="stylesheet" href="/enhancements.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="RuxBox+, inicio">
+        <span class="brand-type"><img class="brand-lockup" src="/ruxbox-plus-logo.png" width="1200" height="400" alt=""></span><span class="brand-tagline" id="brandTagline">Gestión avanzada de Livebox</span>
+      </a>
+      <div id="lineIdentity" class="line-identity" aria-label="Número fijo de la línea gestionada" hidden>
+        <span class="line-identity-label">Línea fija gestionada</span>
+        <strong id="lineNumber" class="line-identity-number"></strong>
+      </div>
+      <div class="header-actions">
+        <button id="themeToggle" class="button button-outline button-small" type="button" aria-label="Cambiar entre modo claro y oscuro">Modo oscuro</button>
+        <button id="settingsOpen" class="button button-outline button-small" type="button" aria-haspopup="dialog">Configuración</button>
+        <span class="local-label"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="4.5" y="8.5" width="11" height="8" rx="2"/><path d="M6.5 8.5V6a3.5 3.5 0 0 1 7 0v2.5"/></svg>Administración local</span>
+        <button id="disconnectButton" class="button button-quiet button-small" type="button" hidden>Desconectar</button>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <section id="pageHeading" class="page-heading" aria-labelledby="pageTitle" hidden>
+        <div><p class="eyebrow">TU LIVEBOX</p><h1 id="pageTitle" class="page-title-with-icon"><span id="pageTitleIcon" class="page-title-icon" aria-hidden="true"></span><span id="pageTitleText">Bloqueo de llamadas</span></h1><p id="pageDescription" class="page-description">Consulta y gestiona las llamadas de tu Livebox.</p></div>
+      </section>
+
+      <section id="statusBar" class="status-bar" aria-label="Estado de conexión" hidden>
+        <span id="connectionStatus" class="connection-status is-disconnected" role="status"><span class="status-dot" aria-hidden="true"></span><span id="connectionText">Comprobando conexión</span></span>
+        <button id="compatBadge" class="compat-badge" type="button" aria-haspopup="dialog" aria-controls="routerInfoDialog" aria-label="Ver información y compatibilidad del router" hidden></button>
+        <span class="status-separator" aria-hidden="true"></span>
+        <span class="updated-label"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 2"/></svg><time id="capturedTime">Sin lectura todavía</time></span>
+        <button id="refreshButton" class="button button-quiet button-small refresh-button" type="button" disabled><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 8A6.5 6.5 0 1 0 16 13M16.5 3.5V8H12"/></svg><span>Actualizar</span></button>
+      </section>
+
+      <div id="busyBanner" class="busy-banner" role="status" aria-live="polite" hidden><span class="busy-spinner" aria-hidden="true"></span><div><strong id="busyTitle">Consultando el router</strong><p id="busyDetail">La operación está en curso.</p></div><span id="busyElapsed" aria-hidden="true"></span></div>
+      <div id="notice" class="notice" role="status" aria-live="polite" aria-atomic="true" hidden><span id="noticeIcon" class="notice-icon" aria-hidden="true"></span><span id="noticeText"></span></div>
+
+      <section id="bootView" class="boot-session-panel panel" role="status" aria-live="polite" aria-label="Comprobando sesión">
+        <span class="boot-session-spinner" aria-hidden="true"></span>
+        <div class="boot-session-copy">
+          <strong>Comprobando sesión…</strong>
+          <p>Recuperando el estado del gestor.</p>
+        </div>
+      </section>
+      <noscript><p class="notice is-warning">RuxBox+ necesita JavaScript para comprobar la sesión. Actívalo en el navegador y vuelve a cargar la página.</p></noscript>
+
+      <section id="connectionView" class="connection-panel panel" aria-labelledby="connectTitle" hidden>
+        <div class="connection-art" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><rect x="9" y="20" width="30" height="18" rx="5"/><path d="M15 20v-5a9 9 0 0 1 18 0v5M24 27v4"/><circle cx="24" cy="26" r="1.5" fill="currentColor" stroke="none"/></svg></div>
+        <p class="eyebrow">ACCESO AL ROUTER</p>
+        <h2 id="connectTitle">Conecta con tu Livebox</h2>
+        <p class="connection-description">Introduce su contraseña de administración para consultar y gestionar la lista de bloqueo.</p>
+        <p class="connection-target">IP del router:
+          <button id="connectionTargetIp" class="connection-target-action" type="button"
+            aria-haspopup="dialog" aria-controls="settingsDialog"
+            aria-label="Cambiar la IP de acceso al router, actualmente 192.168.1.1">192.168.1.1</button>
+        </p>
+        <form id="connectForm" class="connect-form" novalidate>
+          <label for="password">Contraseña de administración</label>
+          <input id="password" type="password" autocomplete="off" spellcheck="false" required aria-describedby="passwordNote connectError" disabled>
+          <p id="connectError" class="field-error" role="alert" hidden></p>
+          <button id="connectButton" class="button button-primary button-full" type="submit" disabled><span>Conectar al router</span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5"/></svg></button>
+        </form>
+        <p id="passwordNote" class="privacy-note"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m10 2 6 2.5V10c0 3.5-3 6-6 8-3-2-6-4.5-6-8V4.5L10 2Z"/><path d="m7 10 2 2 4-4"/></svg>La contraseña no se guarda en este navegador.</p>
+      </section>
+
+
+      <div id="dashboard" hidden>
+        <section id="reviewBanner" class="review-banner" role="alert" aria-labelledby="reviewTitle" hidden>
+          <div class="review-icon" aria-hidden="true">!</div>
+          <div class="review-copy"><h2 id="reviewTitle">Revisa el resultado antes de continuar</h2><p id="reviewText"></p></div>
+          <button id="reviewRefreshButton" class="button button-outline button-small" type="button">Actualizar y revisar</button>
+        </section>
+        <section id="warningsPanel" class="warnings-panel" aria-label="Avisos del router" hidden><ul id="warningsList"></ul></section>
+
+        <nav id="workspaceNav" class="workspace-nav" aria-label="Secciones del gestor" role="tablist">
+          <button type="button" id="navCalls" class="workspace-tab" role="tab" aria-controls="view-calls" aria-selected="true" data-workspace="calls">Llamadas</button>
+          <button type="button" id="navBlocks" class="workspace-tab" role="tab" aria-controls="view-blocks" aria-selected="false" tabindex="-1" data-workspace="blocks">Bloqueos</button>
+          <button type="button" id="navDNS" class="workspace-tab" role="tab" aria-controls="view-dns" aria-selected="false" tabindex="-1" data-workspace="dns">DNS</button>
+          <button type="button" id="navActivity" class="workspace-tab" role="tab" aria-controls="view-activity" aria-selected="false" tabindex="-1" data-workspace="activity">Actividad</button>
+          <button type="button" id="navHelp" class="workspace-tab" role="tab" aria-controls="view-help" aria-selected="false" tabindex="-1" data-workspace="help">Ayuda</button>
+        </nav>
+        <div id="view-calls" class="workspace-view" role="tabpanel" aria-labelledby="navCalls">
+        <section class="panel calls-line-tools" aria-labelledby="callsLineToolsTitle">
+          <div class="calls-line-heading">
+            <div><p class="eyebrow">FUNCIONES DE LA LÍNEA</p><h2 id="callsLineToolsTitle">Herramientas de telefonía</h2></div>
+          </div>
+          <div class="calls-line-actions">
+            <div class="calls-line-action">
+              <span class="calls-line-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M6 3h12v18H6zM9 7h6M9 11h6m-6 4h6"/><path d="M18 8c2 2 2 6 0 8M21 5c4 4 4 10 0 14"/></svg></span>
+              <div class="calls-line-copy"><h3>Probar teléfonos</h3><p>Solicita al Livebox que haga sonar los teléfonos conectados.</p></div>
+              <button id="phoneRingOpen" class="button button-outline button-small" type="button" aria-haspopup="dialog" aria-controls="phoneRingDialog" disabled>Iniciar prueba</button>
+            </div>
+            <div class="calls-line-action">
+              <span class="calls-line-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 8V4a1 1 0 0 1 1-1h4m13 13v4a1 1 0 0 1-1 1h-4M8 12h8m-3-3 3 3-3 3"/></svg></span>
+              <div class="calls-line-copy"><h3>Automarcado</h3><p>Configura el número que se llama tras descolgar y el tiempo de espera.</p></div>
+              <button id="autodialOpen" class="button button-outline button-small" type="button" aria-haspopup="dialog" aria-controls="autodialDialog" disabled>Configurar</button>
+            </div>
+          </div>
+        </section>
+        <section id="historyPanel" class="panel call-history-panel" aria-labelledby="historyTitle">
+          <div class="panel-heading call-history-heading">
+            <div><p class="eyebrow">TU ACTIVIDAD TELEFÓNICA</p><h2 id="historyTitle">Historial de llamadas <span id="missedCount" class="count-badge">—</span></h2></div>
+            <div class="history-heading-actions">
+              <button id="callAlertToggle" class="button button-outline button-small call-alert-toggle" type="button" aria-pressed="false" disabled>Avisarme de llamadas registradas</button>
+              <button id="historyLoadButton" class="button button-outline button-small" type="button" disabled>Consultar llamadas</button>
+              <button id="historyClearButton" class="button button-outline button-small history-clear-button" type="button" disabled>Vaciar registro</button>
+            </div>
+          </div>
+          <p class="call-history-intro">Se cargan al iniciar sesión. Busca, filtra y ordena sin volver a consultar el router.</p>
+          <p id="callAlertStatus" class="call-alert-status" role="status" aria-live="polite">Avisos del historial desactivados. Se comprueban nuevas llamadas registradas con la página abierta, no el timbrado en tiempo real.</p>
+          <div class="call-alert-test-actions"><button id="callAlertTest" class="button button-outline button-small" type="button" hidden>Probar notificación</button></div>
+          <p id="callAlertLatest" class="call-alert-latest" role="status" aria-live="polite" hidden></p>
+          <div class="history-tools">
+            <div class="history-search"><label for="historySearch">Buscar llamadas</label><input id="historySearch" type="search" autocomplete="off" placeholder="Número, fecha o tipo de llamada"></div>
+            <div><label for="historyType">Tipo</label><select id="historyType"><option value="ALL" selected>Todas las llamadas</option><option value="IN">Entrantes</option><option value="OUT">Salientes</option><option value="MISS">Perdidas</option></select></div>
+            <div><label for="historyPeriod">Fechas</label><select id="historyPeriod"><option value="all">Todas las fechas</option><option value="today">Hoy</option><option value="7">Últimos 7 días</option><option value="30">Últimos 30 días</option><option value="custom">Intervalo personalizado</option></select></div>
+            <div><label for="historySort">Ordenar por</label><select id="historySort"><option value="date-desc">Fecha: más recientes</option><option value="date-asc">Fecha: más antiguas</option><option value="number-asc">Número: ascendente</option><option value="number-desc">Número: descendente</option></select></div>
+            <div><label for="historyGroup">Agrupar por</label><select id="historyGroup"><option value="date">Fecha</option><option value="number">Número</option><option value="none">Sin agrupar</option></select></div>
+            <div id="historyDates" class="history-dates" hidden><div><label for="historyFrom">Desde</label><input id="historyFrom" type="date"></div><div><label for="historyTo">Hasta</label><input id="historyTo" type="date"></div></div>
+            <button id="historyReset" class="button button-quiet button-small" type="button">Restablecer filtros</button>
+          </div>
+          <p id="historyStatus" class="call-history-status" role="status" aria-live="polite">Aún no se ha consultado el historial.</p>
+          <p id="historyError" class="field-error call-history-error" role="alert" hidden></p>
+          <p id="historyClearAlert" class="field-error call-history-error" role="alert" hidden>El resultado del vaciado del historial necesita comprobación. Usa «Comprobar resultado»; no repitas el vaciado.</p>
+          <ul id="historyList" class="call-history-list" aria-label="Llamadas del router" hidden></ul>
+          <nav id="historyPager" class="history-pager" aria-label="Páginas del historial" hidden>
+            <button id="historyPrevious" class="button button-outline button-small" type="button" aria-controls="historyList">Anterior</button>
+            <span id="historyPageStatus" role="status" aria-live="polite"></span>
+            <button id="historyNext" class="button button-outline button-small" type="button" aria-controls="historyList">Siguiente</button>
+          </nav>
+          <p id="historyBlockNote" class="call-history-footnote">El icono de bloqueo abre una confirmación. Solo se bloquearán llamadas entrantes del número indicado, incluso al seleccionarlo desde una llamada saliente.</p>
+        </section>
+
+
+
+        </div>
+        <div id="view-blocks" class="workspace-view" role="tabpanel" aria-labelledby="navBlocks" hidden>
+        <section id="legacyBlocksNotice" class="capability-inline" aria-labelledby="legacyBlocksTitle" hidden>
+          <h2 id="legacyBlocksTitle">Función no disponible en este router</h2>
+          <p>El Livebox Fibra antiguo no acredita bloqueo telefónico. Los controles de escritura permanecen desactivados; la gestión de llamadas está en Llamadas.</p>
+        </section>
+        <div id="legacyBlocksWorkspace" class="workspace-grid">
+          <section id="rulesPanel" class="panel rules-panel" aria-labelledby="rulesTitle">
+            <div class="panel-heading"><div><p class="eyebrow">LLAMADAS ENTRANTES</p><h2 id="rulesTitle">Lista de bloqueo <span id="ruleCount" class="count-badge">—</span></h2></div><button id="simulatorOpen" class="button button-quiet button-small simulator-open" type="button" aria-haspopup="dialog" aria-controls="simulatorDialog"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 3h8M8 7h8M6 11h12M6 15h4m4 0h4M6 19h12"/><path d="M3 3h2m-1-1v2M19 19h2m-1-1v2"/></svg><span>Simulador</span></button><span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg></span></div>
+            <div id="rulesLoading" class="rules-placeholder" role="status"><span class="loader" aria-hidden="true"></span><p>Consultando la lista del router…</p></div>
+            <div id="rulesUnavailable" class="empty-state" role="status" hidden><span class="empty-icon" aria-hidden="true">—</span><h3>Bloqueo no disponible</h3><p>Este router no dispone de una lista de bloqueo telefónico acreditada. Las llamadas sí pueden consultarse en Llamadas.</p></div>
+            <div id="rulesEmpty" class="empty-state" hidden><span class="empty-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><rect x="7" y="4" width="18" height="24" rx="4"/><path d="M12 10h8m-8 5h8m-8 5h4"/><path d="m22 22 3 3 5-6"/></svg></span><h3>Tu lista está vacía</h3><p>Añade un número exacto o un patrón de nueve posiciones con dígitos y x al final.</p></div>
+            <ul id="rulesList" class="rules-list" aria-label="Números en la lista de bloqueo" hidden></ul>
+            <footer class="rules-footer"><span><span class="small-dot" aria-hidden="true"></span><span id="rulesReadSource">Lectura directa del router</span></span><span id="additionalConfig" class="additional-config"></span></footer>
+          </section>
+
+          <aside class="side-column" aria-label="Añadir un número">
+            <section class="panel add-panel" aria-labelledby="addTitle">
+              <div class="modal-heading add-heading">
+                <span class="add-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14"/></svg></span>
+                <div class="modal-heading-copy"><p class="eyebrow">NUEVO BLOQUEO</p><h2 id="addTitle">Añadir bloqueo</h2></div>
+              </div>
+              <p class="panel-description">Bloquea un número exacto o prepara un patrón experimental de nueve posiciones. La validación depende de sus caracteres y longitud, no de la nacionalidad del número.</p>
+              <form id="addForm" novalidate>
+                <label for="addMode">Tipo de bloqueo</label>
+                <select id="addMode" aria-describedby="numberNote">
+                  <option value="exact">Número exacto</option>
+                  <option value="prefix">Patrón de 9 posiciones (experimental)</option>
+                </select>
+                <label id="numberLabel" for="numberInput">Número de teléfono</label>
+                <input id="numberInput" class="number-input" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" pattern="[0-9]{1,32}" required placeholder="Número exacto" aria-describedby="numberNote numberError" disabled>
+                <p id="numberNote" class="field-note">De 1 a 32 dígitos, sin +, espacios ni comodines. Se conservan los ceros iniciales.</p>
+                <p id="prefixPreview" class="field-note native-prefix-warning" role="status" aria-live="polite" hidden></p>
+                <p id="numberError" class="field-error" role="alert" hidden></p>
+                <button id="addButton" class="button button-primary button-full" type="submit" disabled><span>Revisar bloqueo</span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5"/></svg></button>
+              </form>
+              <p id="writeNote" class="write-note" hidden></p>
+              <p class="confirmation-note">Toda alta requiere confirmación. El patrón compara nueve posiciones, independientemente del país, pero el formato recibido por el router puede variar. Solo se verificó físicamente una terminación; otras coincidencias podrían no funcionar o afectar llamadas legítimas.</p>
+            </section>
+            <div class="continuity-note"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6l8-3Z"/><path d="m8 12 3 3 5-6"/></svg><div><h3>El bloqueo lo aplica el router</h3><p>En la prueba realizada, el bloqueo siguió funcionando con el gestor cerrado.</p></div></div>
+          </aside>
+        </div>
+
+        </div>
+        <div id="view-dns" class="workspace-view" role="tabpanel" aria-labelledby="navDNS" hidden>
+          <section id="modernDnsPanel" class="panel dns-panel dns-simple" aria-labelledby="dnsTitle">
+            <div class="panel-heading">
+              <div><p class="eyebrow">CONFIGURACIÓN DEL ROUTER</p><h2 id="dnsTitle">Cambiar servidores DNS</h2></div>
+              <span class="section-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M3 7h18M3 12h18M3 17h18M7 5v14M17 5v14"/></svg></span>
+            </div>
+            <div class="dns-body">
+          <section id="legacyDnsNotice" class="capability-inline" aria-labelledby="legacyDnsNoticeTitle" hidden>
+            <h3 id="legacyDnsNoticeTitle">DNS WAN · Solo lectura</h3>
+            <p id="legacyDnsSummary" role="status">Conecta con el router para consultar sus DNS.</p>
+            <p>Este firmware asigna las DNS WAN mediante el operador y no declara un formulario nativo verificado para cambiar los servidores. El campo <code>dns_update</code> modifica nombres locales de dispositivos, no sus resolutores.</p>
+            <p>Puedes utilizar DNS diferentes por dispositivo o mediante un servidor DHCP independiente, pero eso no equivale a modificar la DNS del propio Livebox.</p>
+          </section>
+
+              <p class="dns-intro">Introduce las DNS que quieres utilizar en tu Livebox y pulsa <strong>Guardar DNS</strong>.</p>
+              <div id="dnsModePanel" class="dns-mode-row">
+                <div><span class="dns-mode-label">Configuración actual</span><strong id="dnsModeCurrent" role="status" aria-live="polite">Sin consultar</strong></div>
+                <button id="dnsRefresh" class="button button-outline button-small" type="button">Actualizar</button>
+              </div>
+              <form id="dnsForm" class="dns-form" novalidate>
+                <div class="dns-fields">
+                  <div><label for="dnsPrimary">DNS primaria</label><input id="dnsPrimary" type="text" spellcheck="false" autocomplete="off" inputmode="decimal" maxlength="15" placeholder="1.1.1.1" aria-describedby="dnsInputNote" disabled required></div>
+                  <div><label for="dnsSecondary">DNS secundaria</label><input id="dnsSecondary" type="text" spellcheck="false" autocomplete="off" inputmode="decimal" maxlength="15" placeholder="1.0.0.1" aria-describedby="dnsInputNote" disabled required></div>
+                </div>
+                <p id="dnsInputNote" class="field-note">El cambio se aplica al router, no a los DNS del ordenador. Se pedirá confirmación antes de guardarlo.</p>
+                <p id="dnsError" class="field-error" role="alert" hidden></p>
+                <div class="dns-editor-actions">
+                  <button id="dnsModeStatic" type="submit" class="button button-primary" disabled>Guardar DNS</button>
+                  <button id="dnsModeAuto" type="button" class="button button-quiet button-small" disabled>Usar DNS automáticas</button>
+                </div>
+              </form>
+              <p id="dnsStatus" class="dns-editor-status field-note" role="status" aria-live="polite">Conecta con el router para consultar sus DNS.</p>
+              <p id="dnsLastOperation" class="dns-operation-result" role="status" aria-live="polite" hidden></p>
+              <section id="dnsReconcilePanel" class="dns-operation-result" aria-label="Revisión de un cambio DNS" hidden>
+                <p id="dnsReconcileStatus" role="status" aria-live="polite">Hay un cambio anterior pendiente de comprobar. No se enviará de nuevo.</p>
+                <button id="dnsReconcileInspect" class="button button-outline button-small" type="button">Comprobar cambio anterior</button>
+                <button id="dnsReconcileClose" class="button button-outline button-small" type="button" hidden>Cerrar revisión</button>
+              </section>
+
+              <!-- Referencias internas del diagnóstico anterior: ocultas, nunca forman parte del editor. -->
+              <div id="dnsLegacyInternal" hidden aria-hidden="true">
+                <strong id="dnsCurrentPrimary"></strong><strong id="dnsCurrentSecondary"></strong>
+                <strong id="dnsLastRead"></strong><strong id="dnsCapability"></strong>
+                <button id="dnsPrepare" type="button" disabled></button>
+                <section id="dnsRelayPanel">
+                  <button id="dnsRelayCheck" type="button" disabled></button>
+                  <p id="dnsRelayResult"></p><p id="dnsRelayDetails"></p>
+                  <div id="dnsRelayInventory" hidden><p id="dnsRelayInventoryMeta"></p><pre id="dnsRelayInventoryList"></pre></div>
+                </section>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div id="view-activity" class="workspace-view" role="tabpanel" aria-labelledby="navActivity" hidden>
+        <section id="modernActivityPanel" class="panel activity-panel" aria-labelledby="activityTitle">
+          <div class="panel-heading"><div><p class="eyebrow">SEGUIMIENTO</p><h2 id="activityTitle">Actividad reciente</h2></div><span id="activityCount" class="activity-count"></span></div>
+        <section id="legacyActivityNotice" class="capability-inline" aria-labelledby="legacyActivityTitle" hidden>
+          <h3 id="legacyActivityTitle">Actividad según el firmware</h3>
+          <p>Los cambios de automarcado y el vaciado tienen sus comprobaciones específicas en Llamadas. El historial general de operaciones del Livebox 6 no está disponible en este firmware.</p>
+        </section>
+
+          <p id="activityEmpty" class="activity-empty">No hay operaciones para mostrar.</p>
+          <ol id="activityList" class="activity-list" aria-label="Operaciones recientes" hidden></ol>
+        </section>
+        </div>
+        <div id="view-help" class="workspace-view" role="tabpanel" aria-labelledby="navHelp" hidden>
+          <section class="panel help-panel" aria-labelledby="helpTitle">
+            <header class="help-header">
+              <div>
+                <p class="eyebrow">CENTRO DE AYUDA</p>
+                <h2 id="helpTitle">¿Qué necesitas consultar?</h2>
+                <p>Busca una respuesta, abre un tema o accede directamente a una función. Las instrucciones corresponden a la versión actual de RuxBox+.</p>
+              </div>
+            </header>
+            <div class="help-finder">
+              <label for="helpSearch">Buscar en la ayuda</label>
+              <div class="help-search-field">
+                <span class="help-search-icon" data-help-icon="search" aria-hidden="true"></span>
+                <input id="helpSearch" type="search" autocomplete="off" placeholder="Ej.: prefijos, llamadas, DNS, privacidad" aria-describedby="helpSearchStatus">
+                <button id="helpSearchClear" type="button" class="button button-quiet button-small" hidden>Limpiar</button>
+              </div>
+              <p id="helpSearchStatus" class="help-search-status" role="status" aria-live="polite">7 temas disponibles</p>
+            </div>
+            <div class="help-layout">
+              <nav class="help-index" aria-label="Índice de la ayuda">
+                <p class="help-index-heading">TEMAS</p>
+                <button type="button" class="help-index-link" data-help-section="help-start"><span data-help-icon="settings" aria-hidden="true"></span>Primeros pasos</button>
+                <button type="button" class="help-index-link" data-help-section="help-calls"><span data-help-icon="phone" aria-hidden="true"></span>Llamadas</button>
+                <button type="button" class="help-index-link" data-help-section="help-blocks"><span data-help-icon="shield" aria-hidden="true"></span>Bloqueos y prefijos</button>
+                <button type="button" class="help-index-link" data-help-section="help-simulator"><span data-help-icon="calculator" aria-hidden="true"></span>Simulador</button>
+                <button type="button" class="help-index-link" data-help-section="dnsHelp"><span data-help-icon="layers" aria-hidden="true"></span>DNS</button>
+                <button type="button" class="help-index-link" data-help-section="help-activity"><span data-help-icon="activity" aria-hidden="true"></span>Actividad y resultados</button>
+                <button type="button" class="help-index-link" data-help-section="help-privacy"><span data-help-icon="help" aria-hidden="true"></span>Compatibilidad y privacidad</button>
+              </nav>
+              <div id="helpArticles" class="help-articles">
+                <details id="help-start" class="help-article" open>
+                  <summary><span class="help-article-icon" data-help-icon="settings" aria-hidden="true"></span><span class="help-article-heading"><strong>Primeros pasos</strong><small>Conectar, desconectar y configurar</small></span></summary>
+                  <div class="help-article-body">
+                    <ol class="help-steps">
+                      <li>Conecta con la contraseña de administración del Livebox.</li>
+                      <li>Consulta el estado y la hora de la última lectura antes de gestionar llamadas.</li>
+                      <li>Para cambiar la IP o detectar la puerta de enlace, desconecta primero la sesión y abre <strong>Configuración</strong>.</li>
+                    </ol>
+                    <p>RuxBox+ funciona en este equipo y ofrece su interfaz en <code>127.0.0.1</code>. Cambiar de pestaña no modifica el router. Puedes elegir modo claro, oscuro o automático en Configuración.</p>
+                  </div>
+                </details>
+                <details id="help-calls" class="help-article">
+                  <summary><span class="help-article-icon" data-help-icon="phone" aria-hidden="true"></span><span class="help-article-heading"><strong>Llamadas e historial</strong><small>Buscar, filtrar y recibir avisos</small></span></summary>
+                  <div class="help-article-body">
+                    <h4>Consultar y organizar</h4>
+                    <p>El historial permite filtrar por tipo y fechas, buscar números, ordenar y agrupar los registros ya descargados. Pulsa <strong>Consultar llamadas</strong> o <strong>Actualizar</strong> para leer datos nuevos.</p>
+                    <p>Los indicadores pueden mostrar provincia para números fijos españoles, bandera para prefijos internacionales reconocibles e icono de móvil. La provincia es una zona de numeración, no la ubicación comprobada de quien llama. Los números nacionales de nueve cifras que empiezan por <strong>400</strong> aparecen etiquetados como publicidad; la etiqueta no bloquea llamadas.</p>
+                    <h4>Avisos de llamadas</h4>
+                    <p><strong>Avisarme de llamadas registradas</strong> consulta novedades aproximadamente cada dos minutos mientras la página y la sesión estén abiertas. No detecta cuándo comienza a sonar el teléfono ni funciona con la página cerrada. <strong>Probar notificación</strong> comprueba los permisos del navegador sin llamar al router.</p>
+                    <h4>Automarcado</h4>
+                    <p>En <strong>Herramientas de telefonía → Automarcado</strong> puedes consultar el estado, activar o desactivar la función, establecer un número y elegir una espera de 1 a 10 segundos. El firmware guarda cada ajuste por separado. Antes de aplicar un cambio se muestra una confirmación; después se consulta el estado del router. Si la respuesta es incierta, no repitas la operación sin verificarla.</p>
+                                        <h4>Prueba de teléfonos</h4>
+                    <p>En <strong>Herramientas de telefonía</strong> puedes iniciar una prueba de timbrado con confirmación. El Livebox intentará hacer sonar los terminales; debes comprobar el resultado tú mismo. Solo se envía una solicitud y no se repite automáticamente.</p>
+                    <h4>Acciones importantes</h4>
+                    <p>El icono de bloqueo de una llamada prepara una operación que debes confirmar. <strong>Vaciar registro</strong> elimina todo el historial del router, incluso los registros ocultos por filtros; no se puede recuperar desde RuxBox+.</p>
+                    <button class="button button-outline button-small help-go" type="button" data-help-target="calls" data-action-icon="phone">Ir a Llamadas</button>
+                  </div>
+                </details>
+                <details id="help-blocks" class="help-article">
+                  <summary><span class="help-article-icon" data-help-icon="shield" aria-hidden="true"></span><span class="help-article-heading"><strong>Bloqueos y prefijos</strong><small>Qué se puede bloquear realmente</small></span></summary>
+                  <div class="help-article-body">
+                    <h4>Número exacto</h4>
+                    <p>Puedes introducir de <strong>1 a 32 dígitos</strong>, sin espacios ni el signo +. La coincidencia real depende de cómo el Livebox reciba y registre el número; no se ha acreditado la compatibilidad universal con números internacionales.</p>
+                    <h4>Bloqueo por patrón (experimental)</h4>
+                    <p>Elige <strong>Patrón de 9 posiciones</strong> e introduce de 3 a 8 dígitos o escribe la máscara completa con <code>x</code> minúsculas al final. Por ejemplo: <code>123456</code> y <code>123456xxx</code> preparan el mismo patrón, que representa hasta 1.000 números de nueve posiciones. La aplicación <strong>no clasifica por país</strong>: compara el patrón propuesto con lo que interprete el router.</p>
+                    <p>Solo se admiten nueve posiciones; no se ha verificado cómo se representan las llamadas de distinta longitud, incluidas las internacionales. La máscara no garantiza cobertura universal ni admite caracteres de patrón arbitrarios.</p>
+                    <p class="help-caution"><strong>Limitación demostrada:</strong> el Livebox aceptó anteriormente una máscara y bloqueó una llamada coincidente, pero no se ha verificado que bloquee todas las terminaciones. Una regla amplia podría bloquear llamadas legítimas.</p>
+                    <h4>Cómo añadir o retirar</h4>
+                    <ol class="help-steps"><li>En Bloqueos, elige <strong>Número exacto</strong> o <strong>Patrón de 9 posiciones</strong>.</li><li>Escribe los dígitos iniciales o el patrón completo con x al final, y revisa la regla y su alcance.</li><li>Confirma el cambio solamente si es correcto; el gestor comprobará el resultado.</li></ol>
+                    <p>La papelera prepara la retirada de una regla concreta mediante su identificador. Ante un resultado incierto, <strong>no repitas el envío</strong>: revisa primero el estado de la lista y la actividad.</p>
+                    <button class="button button-outline button-small help-go" type="button" data-help-target="blocks" data-action-icon="shield">Ir a Bloqueos</button>
+                  </div>
+                </details>
+                <details id="help-simulator" class="help-article">
+                  <summary><span class="help-article-icon" data-help-icon="calculator" aria-hidden="true"></span><span class="help-article-heading"><strong>Simulador</strong><small>Probar reglas sin aplicarlas</small></span></summary>
+                  <div class="help-article-body">
+                    <p>Abre el botón <strong>Simulador</strong> dentro de Bloqueos. Introduce condiciones, números de ejemplo y excepciones, o pulsa <strong>Cargar ejemplo</strong>. Después selecciona <strong>Calcular propuesta</strong>.</p>
+                    <p>Los resultados son un <strong>modelo de referencia</strong>, no una prueba de que el firmware acepte todas esas máscaras. Las excepciones tampoco constituyen una lista blanca real.</p>
+                    <p>La simulación no envía cambios. La posible aplicación de tandas pequeñas de números exactos requiere sus propias comprobaciones y confirmaciones.</p>
+                    <button class="button button-outline button-small help-go" type="button" data-help-target="blocks" data-open-simulator="true" data-action-icon="calculator">Abrir Simulador</button>
+                  </div>
+                </details>
+                <details id="dnsHelp" class="help-article">
+                  <summary><span class="help-article-icon" data-help-icon="layers" aria-hidden="true"></span><span class="help-article-heading"><strong id="dnsHelpTitle">Servidores DNS</strong><small>Modo manual y automático</small></span></summary>
+                  <div class="help-article-body">
+                    <p>Las DNS traducen nombres de dominio a direcciones de red. RuxBox+ permite consultar y, si el router es compatible, cambiar las DNS configuradas en el <strong>Livebox</strong>, no las del ordenador.</p>
+                    <ol class="help-steps"><li>Abre DNS y consulta la configuración actual.</li><li>Introduce DNS primaria y secundaria en formato IPv4, o selecciona el modo automático.</li><li>Revisa el diálogo de confirmación y comprueba el resultado después del cambio.</li></ol>
+                    <p>Guardar puede estar desactivado por valores inválidos, falta de lectura o una operación pendiente de revisión. Al volver al modo automático, las DNS anteriores del operador podrían no restaurarse inmediatamente.</p>
+                    <p><strong>Pendiente de comprobar:</strong> la persistencia de la configuración manual tras reiniciar el router. El cambio no modifica directamente el DNS del PC ni el DHCP de la LAN.</p>
+                    <button class="button button-outline button-small help-go" type="button" data-help-target="dns" data-action-icon="layers">Ir a DNS</button>
+                  </div>
+                </details>
+                <details id="help-activity" class="help-article">
+                  <summary><span class="help-article-icon" data-help-icon="activity" aria-hidden="true"></span><span class="help-article-heading"><strong>Actividad y resultados</strong><small>Confirmado, fallido o por revisar</small></span></summary>
+                  <div class="help-article-body">
+                    <p><strong>Completado:</strong> el gestor pudo acreditar el resultado. <strong>Fallido:</strong> no se completó la operación según la evidencia disponible. <strong>Revisión necesaria:</strong> todavía no puede determinarse con seguridad lo que ocurrió.</p>
+                    <p>Una operación incierta <strong>nunca debe repetirse sin comprobar antes el estado actual del router</strong>. Los recibos de actividad sirven para comprobar qué se envió y qué se verificó.</p>
+                    <button class="button button-outline button-small help-go" type="button" data-help-target="activity" data-action-icon="activity">Ir a Actividad</button>
+                  </div>
+                </details>
+                <details id="help-privacy" class="help-article">
+                  <summary><span class="help-article-icon" data-help-icon="help" aria-hidden="true"></span><span class="help-article-heading"><strong>Compatibilidad y privacidad</strong><small>Limitaciones, sesiones y datos</small></span></summary>
+                  <div class="help-article-body">
+                    <section id="compatibilityHelp" class="compat-help" aria-labelledby="compatibilityTitle" hidden>
+                      <h4 id="compatibilityTitle">Compatibilidad de este Livebox</h4>
+                      <p id="compatibilityDescription" class="compat-description"></p>
+                      <ul id="compatibilityFeatures" class="compat-features"></ul>
+                      <p class="compat-footnote">Las capacidades se comprueban por función; una versión de firmware no identificada no demuestra incompatibilidad ni compatibilidad total.</p>
+                    </section>
+                    <p>El firmware y la interfaz del router pueden limitar las funciones disponibles. Las máscaras nativas por prefijos siguen siendo experimentales; SIP y los avisos de timbrado real no están incluidos.</p>
+                    <p>La contraseña no se almacena en el navegador. Al desconectar o caducar la sesión se ocultan los datos de llamadas y de la línea. Los recibos operativos se conservan localmente para conciliar cambios ya intentados.</p>
+                    <p>RuxBox+ es una herramienta independiente, no oficial del fabricante ni del operador.</p>
+                  </div>
+                </details>
+                <p id="helpNoResults" class="help-no-results" role="status" hidden>No se encontraron temas. Prueba con otra palabra o pulsa Limpiar.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="page-footer app-footer" aria-label="Información de RuxBox+">
+      <div class="app-footer-main">
+        <div class="app-footer-brand">
+          <span id="footerAppName" class="app-footer-name">RuxBox+</span>
+          <span id="footerAppVersion" class="app-footer-version" aria-label="Versión de la aplicación">Versión —</span>
+        </div>
+        <div class="app-footer-meta">
+          <span>Desarrollado por <a id="footerAuthor" href="https://github.com/RuymanTrujillo/ruxbox-plus" target="_blank" rel="noopener noreferrer">RuxBox+ contributors</a></span>
+          <a id="footerRepository" class="app-footer-github" href="https://github.com/RuymanTrujillo/ruxbox-plus" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/><path d="M14 3h7v7M10 14 21 3"/></svg>
+            <span>Proyecto en GitHub</span>
+          </a>
+        </div>
+      </div>
+      <div class="app-footer-sub">
+        <span id="footerAppDescription">Funciones adicionales para tu Livebox</span>
+        <span id="footerAppNotice">Proyecto independiente · No oficial de Orange ni Jazztel</span>
+      </div>
+    </footer>
+  </div>
+
+  <dialog id="autodialDialog" class="confirm-dialog autodial-dialog" aria-labelledby="autodialTitle">
+    <div class="dialog-content">
+      <p class="eyebrow">FUNCIONES NATIVAS DE LA LÍNEA</p>
+      <h2 id="autodialTitle">Automarcado</h2>
+      <p class="call-action-explanation">Al descolgar, el Livebox puede marcar automáticamente un número transcurridos los segundos configurados. El destino predeterminado suele ser el buzón de voz.</p>
+      <div class="autodial-current">
+        <span id="autodialState" role="status" aria-live="polite">Sin consultar</span>
+        <button id="autodialRefresh" class="button button-outline button-small" type="button">Actualizar estado</button>
+      </div>
+      <div class="autodial-control">
+        <div><label for="autodialNumber">Número de destino</label><p>Máximo 32 caracteres: cifras y símbolos telefónicos +, -, * o #.</p></div>
+        <div class="autodial-input-row"><input id="autodialNumber" type="tel" maxlength="32" autocomplete="off" spellcheck="false" placeholder="Número que se marcará" disabled><button id="autodialSaveNumber" class="button button-outline button-small" type="button" disabled>Guardar número</button></div>
+      </div>
+      <div class="autodial-control">
+        <div><label for="autodialTimeout">Espera al descolgar</label><p>De 1 a 10 segundos, según la interfaz nativa.</p></div>
+        <div class="autodial-input-row"><input id="autodialTimeout" type="number" min="1" max="10" step="1" inputmode="numeric" disabled><span>segundos</span><button id="autodialSaveTimeout" class="button button-outline button-small" type="button" disabled>Guardar espera</button></div>
+      </div>
+      <div class="autodial-activation">
+        <p>La activación se guarda independientemente del número y del temporizador.</p>
+        <button id="autodialToggle" class="button button-outline button-small" type="button" disabled>Activar automarcado</button>
+      </div>
+      <p id="autodialMessage" class="call-action-result" role="status" aria-live="polite" hidden></p>
+      <div class="dialog-actions"><button id="autodialClose" class="button button-outline" type="button">Cerrar</button></div>
+    </div>
+  </dialog>
+  <dialog id="autodialConfirmDialog" class="confirm-dialog call-action-dialog" aria-labelledby="autodialConfirmTitle" aria-describedby="autodialConfirmSummary">
+    <div class="dialog-content">
+      <p class="eyebrow">CONFIRMACIÓN DEL LIVEBOX</p>
+      <h2 id="autodialConfirmTitle">Confirmar automarcado</h2>
+      <p id="autodialConfirmSummary" class="call-action-explanation"></p>
+      <p>Se enviará una sola operación al router. Después se consultará de nuevo su estado; no se repetirá automáticamente si la respuesta es incierta.</p>
+      <div class="dialog-actions"><button id="autodialConfirmCancel" class="button button-outline" type="button">Cancelar</button><button id="autodialConfirmApply" class="button button-primary" type="button">Confirmar cambio</button></div>
+    </div>
+  </dialog>
+  <dialog id="phoneRingDialog" class="confirm-dialog call-action-dialog" aria-labelledby="phoneRingTitle" aria-describedby="phoneRingDescription">
+    <div class="dialog-content">
+      <p class="eyebrow">DIAGNÓSTICO DEL LIVEBOX</p>
+      <h2 id="phoneRingTitle">Probar teléfonos conectados</h2>
+      <p id="phoneRingDescription" class="call-action-explanation">Se enviará una única orden de prueba al Livebox para que suenen los teléfonos conectados. El sonido debe comprobarse físicamente. No se efectuará una llamada externa ni se modificarán los bloqueos.</p>
+      <p id="phoneRingStatus" class="call-action-result" role="status" aria-live="polite" hidden></p>
+      <div class="dialog-actions">
+        <button id="phoneRingCancel" type="button" class="button button-outline">Cancelar</button>
+        <button id="phoneRingConfirm" type="button" class="button button-primary">Hacer sonar teléfonos</button>
+      </div>
+    </div>
+  </dialog>
+  <dialog id="simulatorDialog" class="confirm-dialog simulator-dialog" aria-labelledby="policyTitle">
+    <div class="dialog-content">
+      <div class="simulator-modal-toolbar">
+        <button id="simulatorClose" class="button button-quiet button-small" type="button" aria-label="Cerrar simulador"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15"/></svg><span>Cerrar</span></button>
+      </div>
+<section id="policyDesigner" class="panel policy-designer" aria-labelledby="policyTitle">
+          <div class="designer-page-heading">
+            <div><p class="eyebrow">PRUEBA SIN MODIFICAR EL ROUTER</p><h2 id="policyTitle" class="policy-title">Simulador de bloqueos</h2></div>
+            <span class="proposal-badge">Propuesta no aplicada</span>
+          </div>
+          <div class="policy-body">
+            <div class="simulator-introduction">
+              <h3>¿Para qué sirve?</h3>
+              <p>Antes de bloquear números, puedes <strong>probar una regla</strong> y ver cuáles coincidirían con ella. Por ejemplo, simular el prefijo 912 para números de Madrid. <strong>No bloquea ninguna llamada por sí solo.</strong></p>
+              <ol class="simulator-steps"><li><strong>1. Define</strong> los números o prefijos</li><li><strong>2. Comprueba</strong> números de ejemplo</li><li><strong>3. Revisa</strong> el resultado antes de cualquier cambio</li></ol>
+              <p class="simulator-example">Ejemplo: prefijo <strong>912</strong>, longitud <strong>9</strong> → coincidiría con 912345678; no con 934567890.</p>
+            </div>
+            <form id="policyForm" novalidate aria-labelledby="policyTitle">
+              <div class="policy-section-heading"><h3>1. ¿Qué números quieres comprobar?</h3><div class="policy-heading-actions"><button id="policyExampleButton" class="button button-outline button-small" type="button">Cargar ejemplo</button><button id="policyAddBlockButton" class="button button-outline button-small" type="button">Añadir condición</button></div></div>
+              <div id="policyBlocks" class="policy-blocks"></div>
+              <p class="field-note">Las máscaras admiten dígitos, x y clases como [2-4], con longitud fija. No se normalizan los números.</p>
+              <div class="policy-text-grid">
+                <div><label for="policyExceptions">2. Números que quieres excluir (opcional)</label><textarea id="policyExceptions" rows="4" inputmode="numeric" spellcheck="false" autocomplete="off" aria-describedby="policyExceptionsNote"></textarea><p id="policyExceptionsNote" class="field-note">Un número exacto por línea, sin espacios. Estas excepciones no son una lista blanca activa.</p></div>
+                <div><label for="policySamples">3. Comprueba números de ejemplo</label><textarea id="policySamples" rows="4" spellcheck="false" autocomplete="off" aria-describedby="policySamplesNote"></textarea><p id="policySamplesNote" class="field-note">Un identificador por línea, tal como aparece en el registro de llamadas.</p></div>
+              </div>
+              <div class="policy-actions"><p>Los patrones siguen pendientes de validación en el Livebox. El cálculo usa el modelo de referencia.</p><button id="policyPreviewButton" class="button button-primary" type="submit">Calcular propuesta</button></div>
+              <p id="policyError" class="field-error" role="alert" hidden></p>
+            </form>
+            <section id="policyResults" class="policy-results" aria-labelledby="policyResultTitle" hidden>
+              <div class="policy-result-heading"><h3 id="policyResultTitle" tabindex="-1">Resultado de la simulación</h3><span class="proposal-badge">Propuesta no aplicada</span></div>
+              <p id="policyCalculatedAt" class="field-note"></p>
+              <div class="policy-stats"><div><span>Cobertura propuesta</span><strong id="policyCoverage">—</strong><small>Números según el modelo</small></div><div><span>Reglas propuestas</span><strong id="policyMaskCount">—</strong><small>Patrones de referencia</small></div><div><span>Huecos disponibles</span><strong id="policySlots">—</strong><small>En la lista actual</small></div></div>
+              <p id="policyCapacity" class="policy-capacity"></p>
+              <p id="policyExceptionSummary" class="field-note"></p>
+              <div id="policyConflictsPanel" class="policy-alert" hidden><h4>Excepciones cubiertas por reglas existentes</h4><ul id="policyConflicts"></ul></div>
+              <div id="policyUnknownPanel" class="policy-alert" hidden><h4>Reglas cuya cobertura no se puede determinar</h4><ul id="policyUnknown"></ul></div>
+              <div class="policy-result-grid"><div><h4>Reglas resultantes del modelo</h4><ul id="policyCompiledList" class="policy-compiled"></ul><p id="policyCompiledEmpty" class="field-note" hidden>La propuesta no incluye ningún número.</p></div><div><h4>Comprobación según el modelo</h4><ul id="policySampleResults" class="policy-samples"></ul><p id="policySamplesEmpty" class="field-note" hidden>Añade números de ejemplo para comprobarlos.</p></div></div>
+              <details id="policyExactDetails" class="policy-exact-details" hidden><summary id="policyExactSummary">Ver números exactos incluidos</summary><pre id="policyExactList"></pre></details>
+              <div class="policy-apply-action">
+                <div><h4>Aplicar números exactos</h4><p id="policyApplyHelp" class="field-note">Solo propuestas pequeñas y sin conflictos; nunca se enviarán máscaras no validadas.</p></div>
+                <button id="policyApplyButton" class="button button-outline" type="button" disabled hidden>Revisar aplicación</button>
+              </div>
+            </section>
+          </div>
+        </section>
+    </div>
+  </dialog>
+
+  <dialog id="dnsReconcileDialog" class="confirm-dialog dns-confirm-dialog" aria-labelledby="dnsReconcileTitle" aria-describedby="dnsReconcileSummary">
+    <div class="dialog-content">
+      <div class="modal-heading">
+        <div class="modal-heading-copy"><p class="eyebrow">REVISIÓN SIN NUEVA ESCRITURA</p><h2 id="dnsReconcileTitle">¿Cerrar la revisión del intento DNS anterior?</h2></div>
+      </div>
+      <p id="dnsReconcileSummary">Dos lecturas independientes coinciden con el estado anterior al envío. Antes de cerrar se realizará una tercera lectura.</p>
+      <p class="dns-warning">No significa que el cambio nunca se aplicase. Se conservarán los recibos originales y no se enviará DNS_CONF. Para un nuevo cambio hará falta una confirmación diferente.</p>
+      <div class="dialog-actions">
+        <button id="dnsReconcileCancel" class="button button-outline" type="button">Cancelar</button>
+        <button id="dnsReconcileConfirm" class="button button-primary" type="button">Sí, cerrar solo esta revisión</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="dnsConfirmDialog" class="confirm-dialog dns-confirm-dialog" aria-labelledby="dnsConfirmTitle" aria-describedby="dnsConfirmSummary">
+    <div class="dialog-content">
+      <div class="modal-heading"><span class="dialog-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 3 8v8l9 5 9-5V8zM12 3v18M3 8l9 5 9-5"/></svg></span><div class="modal-heading-copy"><p class="eyebrow">CONFIRMACIÓN DE RED</p><h2 id="dnsConfirmTitle">¿Modificar las DNS del Livebox?</h2></div></div>
+      <p id="dnsConfirmSummary" class="dns-confirm-summary"></p>
+      <p class="dns-warning">Se enviará un único cambio al Livebox. Internet podría interrumpirse brevemente. La persistencia tras reiniciar aún no se ha comprobado.</p>
+      <p id="dnsConfirmError" class="field-error" role="alert" hidden></p>
+      <div class="dialog-actions">
+        <button id="dnsCancel" class="button button-outline" type="button">Cancelar</button>
+        <button id="dnsCommit" class="button button-primary" type="button">Sí, aplicar estas DNS</button>
+      </div>
+    </div>
+  </dialog>
+  <dialog id="routerInfoDialog" class="confirm-dialog router-info-dialog" aria-labelledby="routerInfoTitle" aria-describedby="routerInfoIntroduction routerInfoPrivacy">
+    <div class="dialog-content">
+      <div class="modal-heading">
+        <span class="dialog-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="13" rx="3"/><path d="M7 22v-4m10 4v-4M7 12h.01M11 12h.01M15 12h.01"/></svg></span>
+        <div class="modal-heading-copy"><p class="eyebrow">ESTADO Y RED</p><h2 id="routerInfoTitle" tabindex="-1">Información del router</h2></div>
+      </div>
+      <section class="router-info-section" aria-labelledby="routerInfoLocalTitle">
+        <p id="routerInfoIntroduction" class="router-info-intro">Los datos de modelo, fabricante, firmware y WAN se leen de la información interna del Livebox. El nombre local se verifica mediante DNS inverso y directo. La conexión pública del equipo que ejecuta RuxBox+ se muestra aparte.</p>
+        <h3 id="routerInfoLocalTitle">Router y telefonía</h3>
+        <p id="routerInfoLocalStatus" class="router-info-progress" role="status" aria-live="polite">Pendiente de consulta.</p>
+        <dl id="routerInfoLocal" class="router-info-grid"></dl>
+        <button id="routerInfoLocalReload" class="button button-outline button-small" type="button" hidden><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M5.6 9A7 7 0 0 1 18 6l2 1M4 17l2 1a7 7 0 0 0 12.4-3"/></svg><span>Reintentar lectura</span></button>
+      </section>
+      <section class="router-info-section" aria-labelledby="routerInfoNetworkTitle">
+        <h3 id="routerInfoNetworkTitle">Internet y proveedor</h3>
+        <p id="routerInfoNetworkStatus" class="router-info-progress" role="status" aria-live="polite">Consulta disponible al abrir esta ventana.</p>
+        <dl id="routerInfoNetwork" class="router-info-grid"></dl>
+        <p id="routerInfoPrivacy" class="router-info-privacy">La información pública procede de ipinfo.io, consultado por HTTPS solo al abrir estos detalles. El servicio ve la IP de salida de este equipo, sin recibir contraseñas ni números de llamadas. Si utilizas VPN, proxy o CGNAT, esta IP puede ser distinta de la WAN del Livebox. La ubicación indicada por la IP es aproximada.</p>
+      </section>
+      <section class="router-info-section" aria-labelledby="routerInfoFunctionsTitle">
+        <h3 id="routerInfoFunctionsTitle">Funciones verificadas</h3>
+        <div id="routerInfoFunctions" class="router-info-function-list"></div>
+      </section>
+      <div class="dialog-actions">
+        <button id="routerInfoReload" class="button button-outline" type="button"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M5.6 9A7 7 0 0 1 18 6l2 1M4 17l2 1a7 7 0 0 0 12.4-3"/></svg><span class="button-caption">Actualizar</span></button>
+        <button id="routerInfoClose" class="button button-primary" type="button"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg><span>Cerrar</span></button>
+      </div>
+    </div>
+  </dialog>
+  <dialog id="clearHistoryDialog" class="confirm-dialog clear-history-dialog" aria-labelledby="clearHistoryTitle" aria-describedby="clearHistorySummary clearHistoryStatus">
+    <div class="dialog-content">
+      <div class="modal-heading">
+        <span class="dialog-symbol is-danger" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16M9 3h6l1 3M6.5 6l1 15h9l1-15M10 10v7m4-7v7"/></svg></span>
+        <div class="modal-heading-copy"><p class="eyebrow">ACCIÓN IRREVERSIBLE</p><h2 id="clearHistoryTitle">¿Vaciar todo el registro de llamadas?</h2></div>
+      </div>
+      <p id="clearHistorySummary" class="confirm-summary">Se eliminarán del Livebox las llamadas perdidas, entrantes y salientes, no solo las que muestran tus filtros. Las reglas de bloqueo no se modificarán.</p>
+      <p class="clear-history-warning">El registro eliminado no podrá recuperarse desde este gestor. Esta operación se enviará una sola vez y nunca se reenviará automáticamente.</p>
+      <p id="clearHistoryStatus" class="field-note" role="status" aria-live="polite">No se ha enviado ningún borrado.</p>
+      <p id="clearHistoryError" class="field-error" role="alert" hidden></p>
+      <div class="dialog-actions">
+        <button id="clearHistoryCancel" class="button button-outline" type="button">Cancelar</button>
+        <button id="clearHistoryConfirm" class="button button-danger" type="button">Sí, vaciar todo el registro</button>
+      </div>
+    </div>
+  </dialog>
+  <dialog id="policyApplyDialog" class="confirm-dialog policy-batch-dialog" aria-labelledby="policyApplyTitle" aria-describedby="policyApplySummary policyApplyProgress">
+    <div class="dialog-content">
+      <div class="modal-heading">
+        <span class="dialog-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m12 2 8 3v7c0 5-3 8-8 10-5-2-8-5-8-10V5z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <div class="modal-heading-copy"><p class="eyebrow">REVISIÓN DE BLOQUEOS</p><h2 id="policyApplyTitle">Aplicar números exactos</h2></div>
+      </div>
+      <p id="policyApplySummary" class="confirm-summary"></p><pre id="policyApplyList" class="policy-batch-list"></pre>
+      <p class="policy-batch-warning">Se hará un alta individual por número. No es una transacción atómica: si se detiene, las reglas completadas permanecen y podrán retirarse individualmente.</p>
+      <p data-busy-note class="modal-busy" role="status" hidden></p>
+      <p id="policyApplyProgress" class="policy-batch-progress" role="status" aria-live="polite">Sin cambios enviados.</p>
+      <div class="dialog-actions policy-batch-actions">
+        <button id="policyApplyCancel" class="button button-outline" type="button">Cancelar</button>
+        <button id="policyApplyConfirm" class="button button-primary" type="button">Confirmar aplicación</button>
+        <button id="policyApplyStop" class="button button-outline" type="button" hidden>Detener tras la actual</button>
+        <button id="policyApplyClose" class="button button-primary" type="button" hidden>Cerrar y revisar lista</button>
+      </div>
+    </div>
+  </dialog>
+  <dialog id="settingsDialog" class="confirm-dialog settings-dialog" aria-labelledby="settingsTitle">
+    <div class="dialog-content">
+      <div class="modal-heading">
+        <span class="dialog-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v3m0 14v3M4 12H2m20 0h-2M5 5l2 2m10 10 2 2M19 5l-2 2M7 17l-2 2"/><circle cx="12" cy="12" r="4"/></svg></span>
+        <div class="modal-heading-copy"><p class="eyebrow">PREFERENCIAS LOCALES</p><h2 id="settingsTitle">Configuración</h2></div>
+      </div>
+      <p class="settings-intro">La IP indica a qué Livebox se conecta este gestor. No cambia la configuración de red del router.</p>
+      <form id="settingsForm" novalidate><label for="routerIpInput">Dirección IP del router</label><input id="routerIpInput" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="192.168.1.1" aria-describedby="settingsHint settingsError">
+      <p id="settingsHint" class="field-note">Dirección predeterminada: 192.168.1.1. Desconecta la sesión del router para cambiarla.</p>
+      <button id="routerDetect" class="button button-outline" type="button">Autodetectar IP del router</button>
+      <p id="detectResult" class="field-note" role="status"></p>
+      <label for="themeSelect" class="theme-label">Aspecto</label><select id="themeSelect"><option value="system">Según el sistema</option><option value="light">Claro</option><option value="dark">Oscuro</option></select>
+      <p id="settingsError" class="field-error" role="alert" hidden></p><p data-busy-note class="modal-busy" role="status" hidden></p>
+      <div class="dialog-actions"><button id="settingsClose" class="button button-outline" type="button">Cerrar</button><button id="settingsSave" class="button button-primary" type="submit">Guardar IP</button></div></form>
+    </div>
+  </dialog>
+  <dialog id="confirmDialog" class="confirm-dialog" aria-labelledby="confirmTitle" aria-describedby="confirmSummary confirmExpiry">
+    <div class="dialog-content">
+      <div class="modal-heading">
+        <span id="confirmIcon" class="dialog-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6l8-3Z"/><path d="m8 12 3 3 5-6"/></svg></span>
+        <div class="modal-heading-copy"><p class="eyebrow">CONFIRMA EL CAMBIO</p><h2 id="confirmTitle">¿Bloquear este número?</h2></div>
+      </div>
+      <p id="confirmNumber" class="confirm-number"></p>
+      <p id="confirmSummary" class="confirm-summary"></p>
+      <p id="confirmExpiry" class="confirm-expiry"></p>
+      <p data-busy-note class="modal-busy" role="status" hidden></p>
+      <p id="confirmError" class="field-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button id="cancelPlanButton" class="button button-outline" type="button">Cancelar</button><button id="commitButton" class="button button-primary" type="button">Confirmar bloqueo</button></div>
+    </div>
+  </dialog>
+  <div id="announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

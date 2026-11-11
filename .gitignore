@@ -1,0 +1,42 @@
+# Secrets and runtime state
+.env
+.env.*
+!.env.example
+*.ontbox
+*config-private*/
+**/data/
+**/logs/
+**/temp/
+**/tmp/
+**/captures/
+**/evidence/
+**/analysis/
+**/verification/
+**/manager-candidates/
+**/private/
+**/node_modules/
+**/playwright-report/
+**/test-results/
+**/__pycache__/
+*.pyc
+*.log
+*.bak
+*.bak.*
+*.tmp
+*.lock
+
+# Credentials, keys and sessions
+*.pem
+*.p12
+*.pfx
+*.key
+*.token
+*credentials*
+*session*.json
+
+# Local tools / built packages
+tools/
+releases/
+dist/
+build/
+*.zip

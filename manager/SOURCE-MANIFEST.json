@@ -1,0 +1,655 @@
+{
+  "schema": "ruxbox-plus-source-manifest-v1",
+  "version": "0.4.25",
+  "phase": "fresh-public-snapshot",
+  "parent_version": null,
+  "generated_utc": "2026-11-11T11:24:54.724656+00:00",
+  "scope": "Fresh public source of latest validated runtime only; no historical tests, private data, or prior Git commits.",
+  "files": [
+    {
+      "path": "manager/README.md",
+      "bytes": 1044,
+      "sha256": "5b86f578fed79ff12f30399f335d944e573bb20d558a4003844f5bc828212751"
+    },
+    {
+      "path": "manager/abrir-gestor.cmd",
+      "bytes": 139,
+      "sha256": "bcd266903c11f6e9605b0839f019d3ac8c6d040bbac1b978ba527b5aa7eba698"
+    },
+    {
+      "path": "manager/autodial-core.mjs",
+      "bytes": 3579,
+      "sha256": "f0c7fb7b5a7bcf1b1af87dac2966a1497f776d84a53c50e77845582ba6f2de8e"
+    },
+    {
+      "path": "manager/browser-runtime.mjs",
+      "bytes": 1903,
+      "sha256": "c9fed5034236cb537d4098419ba73a5353c323a6b682197a7e67ea57f83784b6"
+    },
+    {
+      "path": "manager/call-history.mjs",
+      "bytes": 11320,
+      "sha256": "98f6b7a09d4372fe3282faf033c0bd86939bb2e8e400bd66fa9210579ffdd3c7"
+    },
+    {
+      "path": "manager/compatibility.mjs",
+      "bytes": 4719,
+      "sha256": "3338f6d50fdccca07b830388a3114bfea419b20b2f3a948b65eee17344c46fa3"
+    },
+    {
+      "path": "manager/core.mjs",
+      "bytes": 13602,
+      "sha256": "01f0ef1065c7439a052c6cc7edfae41b530fe9685679f5f508fbf0b1a2d170e5"
+    },
+    {
+      "path": "manager/dns-core.mjs",
+      "bytes": 6323,
+      "sha256": "2cd5caad12f17e21fead98ad109c1544ebafa9d7935890d7be5ae047166fcaeb"
+    },
+    {
+      "path": "manager/dns-reconciliation.mjs",
+      "bytes": 14520,
+      "sha256": "1279a710e7e937ef70593fa04e1bdeba109222746134cc1ec9552bd143553384"
+    },
+    {
+      "path": "manager/dns-relay-probe.mjs",
+      "bytes": 8620,
+      "sha256": "4f769400886b1fca574a6b9dfd49d0c0aac2b1e4ae2c44c36590f3be746b9285"
+    },
+    {
+      "path": "manager/dns-workflow.mjs",
+      "bytes": 24350,
+      "sha256": "007a746847f2862d3f889df9c3374c75e182ebac7927a54237bdf97b0cc0de27"
+    },
+    {
+      "path": "manager/http-transport.mjs",
+      "bytes": 2281,
+      "sha256": "6210a5e0aa8389f874c60fafb69bc460c6743496a0eee3c60d01e7ecf8dec674"
+    },
+    {
+      "path": "manager/launcher.mjs",
+      "bytes": 13788,
+      "sha256": "d6d30cb6a9f01f7d8f738921f89f247068fec8d3ea468c3794985e6d6a4b2e2c"
+    },
+    {
+      "path": "manager/legacy-fibra.mjs",
+      "bytes": 39216,
+      "sha256": "f69e7898c88664e34653a076e4da56ad8f162569333d9fadbe4be31e77d53e38"
+    },
+    {
+      "path": "manager/native-form.mjs",
+      "bytes": 2951,
+      "sha256": "a54496f8591ed050b828be8d50cff982f0365d5423cb752a1ce55cdac5de80e4"
+    },
+    {
+      "path": "manager/policy-core.mjs",
+      "bytes": 12887,
+      "sha256": "6e34ceb3ca3edc20d136e28092afb3dc97e578f9492b7806101a89b2164b1859"
+    },
+    {
+      "path": "manager/private-storage.mjs",
+      "bytes": 8503,
+      "sha256": "d2f6c4a10bbadeda469539767bd1fbade59c521fb717a129cf9208d4e300d00d"
+    },
+    {
+      "path": "manager/public-connection.mjs",
+      "bytes": 4823,
+      "sha256": "24ebe87a450dc0e96e3a26600465d0461b66e09576ae139c2a0cb32ca7296d63"
+    },
+    {
+      "path": "manager/public/app-info.mjs",
+      "bytes": 572,
+      "sha256": "b078a330f2dc8f7f87207152a7f848be029b098755070a3c7ecc8e1d4c92b8c7"
+    },
+    {
+      "path": "manager/public/app.js",
+      "bytes": 124571,
+      "sha256": "8979bef04561e6eb02de2b25c79a108f13824a571f776340a196f1c79afd98a5"
+    },
+    {
+      "path": "manager/public/call-enrichment.mjs",
+      "bytes": 10703,
+      "sha256": "8ecf0e5935471dac7c4a9093f0f91773d1d68202e2fab54610c0ea3339bcdca4"
+    },
+    {
+      "path": "manager/public/call-history-view.mjs",
+      "bytes": 10148,
+      "sha256": "c5fe382e0863323d0b6c8438e460064220d275b8048f0f1a448c7a8749b861f5"
+    },
+    {
+      "path": "manager/public/call-monitor.mjs",
+      "bytes": 12770,
+      "sha256": "204c06ad37742328521a95940636ccab8f8ed5628c6e91fed3a649da5566e55a"
+    },
+    {
+      "path": "manager/public/dns-ui.mjs",
+      "bytes": 24087,
+      "sha256": "bf11095b8bef1e5d1c6914eb3a41943615d2f8dfc64666fefdc9bc60df50829c"
+    },
+    {
+      "path": "manager/public/enhancements.css",
+      "bytes": 60893,
+      "sha256": "6a53cade56e94494e42d5a49cacdd1e15367a8c6cc7ad6482b6fc3de9e9a59f2"
+    },
+    {
+      "path": "manager/public/flags/LICENSE-MIT.txt",
+      "bytes": 1087,
+      "sha256": "8f1195d55a2fd315a07d812328470ca9ba2abb78c8d317ff19619d5125e00cea"
+    },
+    {
+      "path": "manager/public/flags/ad.svg",
+      "bytes": 30510,
+      "sha256": "1914f0d751b810056fdde2fa27d5c255082b4eeaa5942f8ac27e48dca3a377ed"
+    },
+    {
+      "path": "manager/public/flags/ae.svg",
+      "bytes": 266,
+      "sha256": "3bc52a4aac7c6c68cd7c0a04013fa14f715abfe6958e7a6e3194f0793c9eb816"
+    },
+    {
+      "path": "manager/public/flags/al.svg",
+      "bytes": 3126,
+      "sha256": "4ae4d2950f6a08528639700e48d19930b964478a2548cb9bf41b898c2b757b11"
+    },
+    {
+      "path": "manager/public/flags/am.svg",
+      "bytes": 228,
+      "sha256": "efb6cdaad5658ae5024c86b099a96c4e3769028894240f4015cbc090a0e90e0f"
+    },
+    {
+      "path": "manager/public/flags/ar.svg",
+      "bytes": 3461,
+      "sha256": "da39bfbe83fd35fae781f605c4a297b632f03ccf72d4cb0499e86dac8370663d"
+    },
+    {
+      "path": "manager/public/flags/at.svg",
+      "bytes": 195,
+      "sha256": "c0e5cb3c1d59fd002afd6e2b0dd03787677ca3c9e7b2321f4af6d9e28256ebcd"
+    },
+    {
+      "path": "manager/public/flags/au.svg",
+      "bytes": 1296,
+      "sha256": "cbb2206c5e59a25d79228306af973666a191e163f0ae337681f447977e6edb18"
+    },
+    {
+      "path": "manager/public/flags/ba.svg",
+      "bytes": 1240,
+      "sha256": "b321fe9b47c1cd741c61b330aee66cf00550622a6a9e740161a9f240a14e0787"
+    },
+    {
+      "path": "manager/public/flags/be.svg",
+      "bytes": 302,
+      "sha256": "d6aff6fa4c913404eafd53f91c0a9b240fcecaddc8f0ac2160d362e38469342c"
+    },
+    {
+      "path": "manager/public/flags/bg.svg",
+      "bytes": 225,
+      "sha256": "b6d979fc96dc6b46c1697a5e05ecfe1fac1fa912ed480ca7a2a9b450f087faf6"
+    },
+    {
+      "path": "manager/public/flags/br.svg",
+      "bytes": 7140,
+      "sha256": "b0a912826c3ffd7287435ebed66e18fe058e992309c00dc10b430dd41a29ba91"
+    },
+    {
+      "path": "manager/public/flags/by.svg",
+      "bytes": 2078,
+      "sha256": "a1efa44ad1167d6d77abbe59ce85aa3a68ff4bd57af79454c08a3ade5c178578"
+    },
+    {
+      "path": "manager/public/flags/ch.svg",
+      "bytes": 290,
+      "sha256": "ac676cd39d7032988598ef2dd73f6bebcd767738e3e469705d6a437835ac485c"
+    },
+    {
+      "path": "manager/public/flags/cl.svg",
+      "bytes": 552,
+      "sha256": "bcf0ccdf0999a1cd82061202988e1f6088c2070e3e76794d67cb375ef325ef76"
+    },
+    {
+      "path": "manager/public/flags/cn.svg",
+      "bytes": 813,
+      "sha256": "981da9bdf82d48e31691f20578cefcb26cf7d0bd95e4ebd5c0df00bdfe988c1a"
+    },
+    {
+      "path": "manager/public/flags/co.svg",
+      "bytes": 286,
+      "sha256": "6bab3c96c1657510c6e49354dd40203c69401bee54da497392ab9267334e5fd4"
+    },
+    {
+      "path": "manager/public/flags/cu.svg",
+      "bytes": 610,
+      "sha256": "15013e0bb414c074af963bab167806dc81b7e1bb6dabc05dac20b2583511e535"
+    },
+    {
+      "path": "manager/public/flags/cy.svg",
+      "bytes": 5466,
+      "sha256": "d2ddf86c24e9d4dc4e2f5cd298b189b9d04a08c0f6497c35249f07d6f1969e33"
+    },
+    {
+      "path": "manager/public/flags/cz.svg",
+      "bytes": 225,
+      "sha256": "d601fcc2e5b1fd48b79d53c55108af4c0e90793f146db51f3ee449d8d69512bc"
+    },
+    {
+      "path": "manager/public/flags/de.svg",
+      "bytes": 221,
+      "sha256": "efd480af5a154a7651f29da23ee0d09dbc892410fb4041898ddf8face336c575"
+    },
+    {
+      "path": "manager/public/flags/dk.svg",
+      "bytes": 236,
+      "sha256": "d2847c0bd7a1fb97977ee51f2f618c5ebc5898dd66ef9804f187613c27bdca1a"
+    },
+    {
+      "path": "manager/public/flags/dz.svg",
+      "bytes": 294,
+      "sha256": "9ea0cf93222ab7b5e7b77b9576afcad80dad1eff33827e8e58dbfbb42aeb8213"
+    },
+    {
+      "path": "manager/public/flags/ec.svg",
+      "bytes": 28777,
+      "sha256": "4472b0618e2f5e31d31d16c0d7d811310c33b07d5a101b54f60fcb7ec84d1d4d"
+    },
+    {
+      "path": "manager/public/flags/ee.svg",
+      "bytes": 225,
+      "sha256": "25642310e287fbdc02e1ac3e0e08fadca9a32eae195f67b6863bf0fc6247176b"
+    },
+    {
+      "path": "manager/public/flags/eg.svg",
+      "bytes": 8726,
+      "sha256": "3f85d1d2bdb03692ad68f84efff36be2f5b1b5b7438b7b7be50def3837bf532f"
+    },
+    {
+      "path": "manager/public/flags/es.svg",
+      "bytes": 80958,
+      "sha256": "f9cfaff858e95f830733ade9591037b5322dfb5827a53b70956a3d190bb49b9a"
+    },
+    {
+      "path": "manager/public/flags/fi.svg",
+      "bytes": 234,
+      "sha256": "012edd984cf1879463c2855b7df02dea2f7de7f7a66b244fb1e22b4227f7aa65"
+    },
+    {
+      "path": "manager/public/flags/fr.svg",
+      "bytes": 231,
+      "sha256": "8cdacc8d79bcf210cdca2777a2c0de1f9e5862526877bd3026c9d59ecdcd4578"
+    },
+    {
+      "path": "manager/public/flags/gb.svg",
+      "bytes": 504,
+      "sha256": "c8be1e7208798a4ae692ee1e937065d498bb29e741943f6172b29118b8ed8066"
+    },
+    {
+      "path": "manager/public/flags/gi.svg",
+      "bytes": 2889,
+      "sha256": "483f5768d4c360c28a751dd121872ed9a2f6568fc358816a95378284526e1d0b"
+    },
+    {
+      "path": "manager/public/flags/gr.svg",
+      "bytes": 868,
+      "sha256": "a184070f7678b06777be8ac38cb05ba41829591a6dac9b64b2b72db66aec82f5"
+    },
+    {
+      "path": "manager/public/flags/hk.svg",
+      "bytes": 727,
+      "sha256": "d9d142b2b97ec3b8190bff3802072c1b4f15573a679eead89a0ce59986dcad0c"
+    },
+    {
+      "path": "manager/public/flags/hr.svg",
+      "bytes": 30732,
+      "sha256": "3c98eae5ee93f0d75e10170beb96e26908830e2e6f7f7af2a4b281a097aeb946"
+    },
+    {
+      "path": "manager/public/flags/hu.svg",
+      "bytes": 271,
+      "sha256": "ffc4edd580d4b9789bee68f33cef24afe826ae571464350fe7b98c7a36b4ff8f"
+    },
+    {
+      "path": "manager/public/flags/id.svg",
+      "bytes": 178,
+      "sha256": "5cd3acc4939dd7eae6318c8d75df8c0d1733f650e2504a2635b0dbf3dfabb040"
+    },
+    {
+      "path": "manager/public/flags/ie.svg",
+      "bytes": 289,
+      "sha256": "f82568d70bd1624ff7ce3ced8712a718a224ff2424fd2ade2da4339be3bba463"
+    },
+    {
+      "path": "manager/public/flags/il.svg",
+      "bytes": 834,
+      "sha256": "04a099ac4370b5e856f5f8d44ce0822ec47a6d3bc395a7d048d3a46d69274d68"
+    },
+    {
+      "path": "manager/public/flags/in.svg",
+      "bytes": 1090,
+      "sha256": "91185efa1a9b52cdc0e470712518efeefc4e4d6a6555bae9de997ba71885bb98"
+    },
+    {
+      "path": "manager/public/flags/ir.svg",
+      "bytes": 15397,
+      "sha256": "cb363e09bafbff6de7c2fba6a002ca33f0563dc83a2328d34adb492cf80ca629"
+    },
+    {
+      "path": "manager/public/flags/is.svg",
+      "bytes": 509,
+      "sha256": "4ef2de6fb25ff5a16789e8ffc3b68894527e68c89dce3b4e1118f5bbcc0bb7ae"
+    },
+    {
+      "path": "manager/public/flags/it.svg",
+      "bytes": 289,
+      "sha256": "9fa88118818d9b64838f578e2babcca3d0630aed21b5c33b34aff7ac5ce506bc"
+    },
+    {
+      "path": "manager/public/flags/jp.svg",
+      "bytes": 470,
+      "sha256": "bfea80baf9989383dc4bf7ca594ed95be0df0ff125bfc88d0bfa878eb0198022"
+    },
+    {
+      "path": "manager/public/flags/kr.svg",
+      "bytes": 1061,
+      "sha256": "7a6cd5b51d0e2841ed8b79b1147ad8a66cf3c09f6344d4a63b5e4413ffa5d15b"
+    },
+    {
+      "path": "manager/public/flags/li.svg",
+      "bytes": 7318,
+      "sha256": "77a33513c5288a0f2044f918efd2f82ba789d599f2e934b2af39b60fba8d9458"
+    },
+    {
+      "path": "manager/public/flags/lk.svg",
+      "bytes": 10724,
+      "sha256": "ed3eee24d19872d6adcecd589513c057c6ecfe4997af36e8d25ef9ed58660d23"
+    },
+    {
+      "path": "manager/public/flags/lt.svg",
+      "bytes": 439,
+      "sha256": "dc0401993f6e14b3a58fa496d874b95dfcb58614052a868b14492166782c1006"
+    },
+    {
+      "path": "manager/public/flags/lu.svg",
+      "bytes": 225,
+      "sha256": "a0a530e396ac2e2490d32d432a89c08a3d35081816ba089241b9b2b2a76a049e"
+    },
+    {
+      "path": "manager/public/flags/lv.svg",
+      "bytes": 230,
+      "sha256": "15d4e812a30208a1caaba6922a3f585db17827d67afae81626ffe4e1e9344ea7"
+    },
+    {
+      "path": "manager/public/flags/ma.svg",
+      "bytes": 247,
+      "sha256": "28cfcdecf9675b0a14fbfae176324aea03711edab1a13592cfb7d58e6772b25c"
+    },
+    {
+      "path": "manager/public/flags/mc.svg",
+      "bytes": 234,
+      "sha256": "690c23fe64b6ac71770657fd87f744b88196a7853abb28017b5bff54473ae0da"
+    },
+    {
+      "path": "manager/public/flags/md.svg",
+      "bytes": 11126,
+      "sha256": "987ca12a752ec2b3594c115923d50160343a7d30af8ea5e316ae04fb12b8e9dd"
+    },
+    {
+      "path": "manager/public/flags/me.svg",
+      "bytes": 56372,
+      "sha256": "d284332e23ef88ae4f1b957ce1c6d9b9f691f94e4726f15d1a4219840008387b"
+    },
+    {
+      "path": "manager/public/flags/mk.svg",
+      "bytes": 379,
+      "sha256": "22488dc890fe1e5f7a8bea423dfe2e74f8ccf04402e75090cdeca030b12ca010"
+    },
+    {
+      "path": "manager/public/flags/mo.svg",
+      "bytes": 1370,
+      "sha256": "e1f783f6a43285a4338ee45cfe6f76db67801174968935b9f985d44d17914c83"
+    },
+    {
+      "path": "manager/public/flags/mt.svg",
+      "bytes": 13925,
+      "sha256": "a2ad157eeb5f1bb92dc9706ad90faa111dd39ec019586bc5d12e67c5a6aa6cd5"
+    },
+    {
+      "path": "manager/public/flags/mx.svg",
+      "bytes": 84753,
+      "sha256": "9dbc8ad8b35e52ce7cb686d5cd93bd95e4c0dd8505c184186a740148ffd34901"
+    },
+    {
+      "path": "manager/public/flags/ng.svg",
+      "bytes": 257,
+      "sha256": "b7a2a45a6499095efce41592428ff558ec5bd83d2751858dfe5fa4589334b66f"
+    },
+    {
+      "path": "manager/public/flags/nl.svg",
+      "bytes": 225,
+      "sha256": "8f691f17fe70894537af8e92f2ca47761d353639b0defc15cbe561eb503ab010"
+    },
+    {
+      "path": "manager/public/flags/no.svg",
+      "bytes": 318,
+      "sha256": "ceea17af051dceefd5759a824213eb40ac8a8095aa88a6874a7bbc8de637357a"
+    },
+    {
+      "path": "manager/public/flags/nz.svg",
+      "bytes": 2172,
+      "sha256": "794a2c8c09796090ab748a74bc35aed825e701eaddc46b138f300401ac9a25cd"
+    },
+    {
+      "path": "manager/public/flags/pe.svg",
+      "bytes": 186,
+      "sha256": "e9dd299d453d9c173203e60f69623ef2148dbee24b2a1763328e94d4dfece05f"
+    },
+    {
+      "path": "manager/public/flags/ph.svg",
+      "bytes": 1382,
+      "sha256": "c3bd5e08ddc5f6dbdfa899af9efb45577e3841402e6a7f5d00fef754816b2884"
+    },
+    {
+      "path": "manager/public/flags/pk.svg",
+      "bytes": 725,
+      "sha256": "89e851c0d541d8166b297e13bed97e0cb500bdb4ae48fd83a86b606a078352a8"
+    },
+    {
+      "path": "manager/public/flags/pl.svg",
+      "bytes": 219,
+      "sha256": "369bb3e14ee718df1ee15fd2fb3ad0dae713f78f622e277710fb2b30a313f2aa"
+    },
+    {
+      "path": "manager/public/flags/pt.svg",
+      "bytes": 8001,
+      "sha256": "a7a2cf0b44aaaaf4f3bdc0ee0fa308ec7085bdfedd3f72da1473d43fd2a569fb"
+    },
+    {
+      "path": "manager/public/flags/py.svg",
+      "bytes": 16184,
+      "sha256": "fe0968470b7910543b23f7621b00cdeeebde8d90cffbd4fbcbfa97783a01cc04"
+    },
+    {
+      "path": "manager/public/flags/ro.svg",
+      "bytes": 302,
+      "sha256": "17a3a747fc5e63302aaa670a667e5812f3676f46768e5a3e87b254bd41762840"
+    },
+    {
+      "path": "manager/public/flags/rs.svg",
+      "bytes": 181634,
+      "sha256": "b6e08e2eca1ec4c287e5d5d7c36d7d4ad9503ad030133b04cf315f95ab49961c"
+    },
+    {
+      "path": "manager/public/flags/sa.svg",
+      "bytes": 9968,
+      "sha256": "5738c8cfca5fea63587cbcf69237996c8ce6283f8016853150686f37311b620e"
+    },
+    {
+      "path": "manager/public/flags/se.svg",
+      "bytes": 209,
+      "sha256": "b3b5071e6c1d4a0e3db828bab5c7dfd68d0e90fcf3b25b15e9a2c4f96c1f79c9"
+    },
+    {
+      "path": "manager/public/flags/sg.svg",
+      "bytes": 889,
+      "sha256": "25de9044c2e2775f7ccf9c1df02dd02342f915715b22c43248452b7ae24079a5"
+    },
+    {
+      "path": "manager/public/flags/si.svg",
+      "bytes": 1993,
+      "sha256": "3a5e0cac44baaea6b6d8e91054844b6ea72764f6dbe363c11ea11fd81203733a"
+    },
+    {
+      "path": "manager/public/flags/sk.svg",
+      "bytes": 1182,
+      "sha256": "578d0693bc95214334248b47c5719dd01cfc9839bd909a726df045d499fabbb6"
+    },
+    {
+      "path": "manager/public/flags/sm.svg",
+      "bytes": 15683,
+      "sha256": "fc3388637c187533a086e1a25253cd96ce657bd7d105886624d21addb380af16"
+    },
+    {
+      "path": "manager/public/flags/sn.svg",
+      "bytes": 421,
+      "sha256": "6437db13c13fa5cc1b121e6b59739902c6583be6db361260873ce2664f666478"
+    },
+    {
+      "path": "manager/public/flags/th.svg",
+      "bytes": 284,
+      "sha256": "329cc0d520536d6eb4b9304105f23650c2d02bbdba8f8696e996dbf166de6f2e"
+    },
+    {
+      "path": "manager/public/flags/tn.svg",
+      "bytes": 343,
+      "sha256": "8e0274e5762a4d5f783e64f1206dd69008454f750de21d3ba61439d0af3c577c"
+    },
+    {
+      "path": "manager/public/flags/tr.svg",
+      "bytes": 549,
+      "sha256": "256a1d6afbedb9f731566982331a1cd1ad14aba211b8a61d338855879505e74f"
+    },
+    {
+      "path": "manager/public/flags/tw.svg",
+      "bytes": 2499,
+      "sha256": "931757f06b9ee751fd1a0cc8dd7cf862e21fdcaf894d10ed7bcc68dabcca59ad"
+    },
+    {
+      "path": "manager/public/flags/ua.svg",
+      "bytes": 232,
+      "sha256": "2d869c23ebfefb2ae0a633297c11dee06fcb666ce7b3ca75eba09b7a1a3a03ac"
+    },
+    {
+      "path": "manager/public/flags/uy.svg",
+      "bytes": 1724,
+      "sha256": "47656c0bf4961a1f7233841eb78756cd45d074e7d4061b8a1217bba7754a30fe"
+    },
+    {
+      "path": "manager/public/flags/ve.svg",
+      "bytes": 1206,
+      "sha256": "5712f1c63ba0bfa25a853c100cdebfd6698cce98fc2e0ba8d3fab35df541efa1"
+    },
+    {
+      "path": "manager/public/flags/vn.svg",
+      "bytes": 490,
+      "sha256": "2355037201315d74581ab0ad60b5587a29a087d26b0525bdeb8676e64fae5b86"
+    },
+    {
+      "path": "manager/public/flags/xk.svg",
+      "bytes": 8267,
+      "sha256": "290d7f74bc73f362f9679a0bb09b7de0f679ab9aeaedf3952e40d79e0e3d25af"
+    },
+    {
+      "path": "manager/public/flags/za.svg",
+      "bytes": 860,
+      "sha256": "1755a5e16f1c9f5120e4871e8454bdee663beb4fb4827012bcd02cb9044249c2"
+    },
+    {
+      "path": "manager/public/history-view.mjs",
+      "bytes": 5472,
+      "sha256": "c2ca9cd6d1f2a4f2816120015b010dc0826e4f4452b1baa4aa3cf857b0ba67db"
+    },
+    {
+      "path": "manager/public/index.html",
+      "bytes": 62765,
+      "sha256": "a6d4d258cd33e8b58925ffdfc7d195225881f210d3b47a6610c28ec5784404cf"
+    },
+    {
+      "path": "manager/public/legacy-readback.mjs",
+      "bytes": 5791,
+      "sha256": "a25f8156636e37c62e0ace7796024e475ccd628a5241ca3c719fc30947a1fe37"
+    },
+    {
+      "path": "manager/public/policy-batch.mjs",
+      "bytes": 10433,
+      "sha256": "3bb6c6ef2eed9ce879d08e510834ec0673014b77bd0fd955e18ffea97d973c6b"
+    },
+    {
+      "path": "manager/public/request-budget.mjs",
+      "bytes": 770,
+      "sha256": "50973a04b979334f3c2804962476849210a40a67e1b4788373e06441b0254e2f"
+    },
+    {
+      "path": "manager/public/router-info-dialog.mjs",
+      "bytes": 11282,
+      "sha256": "e397333533a55a95af01fd91aa7a67cd6d12f398289c45182ea1b4ead29d1f2b"
+    },
+    {
+      "path": "manager/public/router-info-model.mjs",
+      "bytes": 3861,
+      "sha256": "de129a46b856040d5d1429d87289dc089c38c52c141400fffd255f3e1d44bc72"
+    },
+    {
+      "path": "manager/public/ruxbox-plus-favicon.png",
+      "bytes": 5608,
+      "sha256": "74328e0e7b04d13153edff5877c9a37feebe45eff4fe671e9864e0b02eb9d40e"
+    },
+    {
+      "path": "manager/public/ruxbox-plus-icon.png",
+      "bytes": 55563,
+      "sha256": "a69ab9f7ca9335af5c1ee3791e16b5dd16c4d8dad385bdb7281d80acf11fe8e9"
+    },
+    {
+      "path": "manager/public/ruxbox-plus-logo.png",
+      "bytes": 260048,
+      "sha256": "61b13dc0f284e51a2d287abb5b61c2f10b10983a0edab32d04e4cb0806063ec8"
+    },
+    {
+      "path": "manager/public/style.css",
+      "bytes": 28220,
+      "sha256": "af6fedc5fe929fcaf9b7e33fc59a2dd7851f0aeb893a13c115ae44850b208f81"
+    },
+    {
+      "path": "manager/public/theme.js",
+      "bytes": 306,
+      "sha256": "fc971226a7aa31aab82b242849f99372598b6192b170940fe85d37f629344b18"
+    },
+    {
+      "path": "manager/read-routes.mjs",
+      "bytes": 10019,
+      "sha256": "f0c11da204b9185df30922f2e57496695fe764da74f0f6a89a30a50c4c3fb339"
+    },
+    {
+      "path": "manager/router-client.mjs",
+      "bytes": 60146,
+      "sha256": "dc686830df78ff60601c64b00aed2aaf049b88c3d535bf2187ee5129373c1f1e"
+    },
+    {
+      "path": "manager/router-device-info.mjs",
+      "bytes": 5633,
+      "sha256": "c892cdf462fd71a3aea23c7be9e6ee4070fe84748a6ad4632227f16e0f2ebdda"
+    },
+    {
+      "path": "manager/router-settings.mjs",
+      "bytes": 4111,
+      "sha256": "133eea6b3d6b21af58cb32a7b80452bb3dafe2373e9007f12e8ff556f35378a5"
+    },
+    {
+      "path": "manager/server.mjs",
+      "bytes": 95251,
+      "sha256": "f32ef41fb154a27f47d7f31eed6643b32caac338125b11faa6954d84339b98c8"
+    },
+    {
+      "path": "manager/static-resources.mjs",
+      "bytes": 2279,
+      "sha256": "7dc9ea618cc7ab903638aabcd1e30959b575d34a9ae530bf18c7b78566eab567"
+    }
+  ]
+}
