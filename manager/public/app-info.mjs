@@ -3,7 +3,7 @@
 // No incluir rutas personales, credenciales, IP ni configuración del router.
 export const APP_INFO=Object.freeze({
   name:'RuxBox+',
-  version:'0.4.25',
+  version:'0.4.26',
   author:'RuxBox+ contributors',
   authorUrl:'https://github.com/RuymanTrujillo/ruxbox-plus',
   repositoryUrl:'https://github.com/RuymanTrujillo/ruxbox-plus',

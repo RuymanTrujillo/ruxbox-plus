@@ -1,16 +1,11 @@
 {
   "schema": "ruxbox-plus-source-manifest-v1",
-  "version": "0.4.25",
-  "phase": "fresh-public-snapshot",
-  "parent_version": null,
-  "generated_utc": "2026-11-11T11:24:54.724656+00:00",
-  "scope": "Fresh public source of latest validated runtime only; no historical tests, private data, or prior Git commits.",
+  "version": "0.4.26",
+  "phase": "release-ready-local-shutdown",
+  "parent_version": "0.4.25",
+  "generated_utc": "2026-11-13T18:40:00.999154+00:00",
+  "scope": "Source code for RuxBox+ 0.4.26 with authenticated local graceful shutdown; private data, secrets and historical Git remain excluded.",
   "files": [
-    {
-      "path": "manager/README.md",
-      "bytes": 1044,
-      "sha256": "5b86f578fed79ff12f30399f335d944e573bb20d558a4003844f5bc828212751"
-    },
     {
       "path": "manager/abrir-gestor.cmd",
       "bytes": 139,
@@ -99,7 +94,7 @@
     {
       "path": "manager/public/app-info.mjs",
       "bytes": 572,
-      "sha256": "b078a330f2dc8f7f87207152a7f848be029b098755070a3c7ecc8e1d4c92b8c7"
+      "sha256": "7f75223d1e17cfa5764fb5365ed6ccd580f0d4834bd363e8a51fcd9412458428"
     },
     {
       "path": "manager/public/app.js",
@@ -130,11 +125,6 @@
       "path": "manager/public/enhancements.css",
       "bytes": 60893,
       "sha256": "6a53cade56e94494e42d5a49cacdd1e15367a8c6cc7ad6482b6fc3de9e9a59f2"
-    },
-    {
-      "path": "manager/public/flags/LICENSE-MIT.txt",
-      "bytes": 1087,
-      "sha256": "8f1195d55a2fd315a07d812328470ca9ba2abb78c8d317ff19619d5125e00cea"
     },
     {
       "path": "manager/public/flags/ad.svg",
@@ -355,6 +345,11 @@
       "path": "manager/public/flags/li.svg",
       "bytes": 7318,
       "sha256": "77a33513c5288a0f2044f918efd2f82ba789d599f2e934b2af39b60fba8d9458"
+    },
+    {
+      "path": "manager/public/flags/LICENSE-MIT.txt",
+      "bytes": 1087,
+      "sha256": "8f1195d55a2fd315a07d812328470ca9ba2abb78c8d317ff19619d5125e00cea"
     },
     {
       "path": "manager/public/flags/lk.svg",
@@ -627,6 +622,11 @@
       "sha256": "f0c11da204b9185df30922f2e57496695fe764da74f0f6a89a30a50c4c3fb339"
     },
     {
+      "path": "manager/README.md",
+      "bytes": 1353,
+      "sha256": "1e0ee033bf20f98e75d64de402e23bd88b2f017d5e0be13bac1a02b69ccd5a3a"
+    },
+    {
       "path": "manager/router-client.mjs",
       "bytes": 60146,
       "sha256": "dc686830df78ff60601c64b00aed2aaf049b88c3d535bf2187ee5129373c1f1e"
@@ -643,13 +643,23 @@
     },
     {
       "path": "manager/server.mjs",
-      "bytes": 95251,
-      "sha256": "f32ef41fb154a27f47d7f31eed6643b32caac338125b11faa6954d84339b98c8"
+      "bytes": 97074,
+      "sha256": "4ee4bb6357b501735050f83df9f2a68887cdc5356309dd18aa1ad87c8079f0ae"
     },
     {
       "path": "manager/static-resources.mjs",
       "bytes": 2279,
       "sha256": "7dc9ea618cc7ab903638aabcd1e30959b575d34a9ae530bf18c7b78566eab567"
+    },
+    {
+      "path": "manager/stop.mjs",
+      "bytes": 4772,
+      "sha256": "ed5e46abf5b6aec21d6b2cdb65606748330eed71280d241e15d57ff63cb0ebf6"
+    },
+    {
+      "path": "PARAR.cmd",
+      "bytes": 354,
+      "sha256": "005394475f3145f85c3151f13b9a802056b0d53d952dde2a391f1d0732980a3c"
     }
   ]
 }

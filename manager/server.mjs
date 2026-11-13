@@ -332,7 +332,8 @@ const CLEAR_CHECK_MESSAGES=Object.freeze({
 export async function createManagerServer({driver, dataDir, host = '127.0.0.1', port = 8765,
   detectGateway = detectRouterGateway, publicConnectionLookup = lookupPublicConnection, localRouterNameLookup = readLocalRouterHostname,
   relayProbe=probeDnsRelay, sessionTtlMs = 30 * 60_000, planTtlMs = 120_000, maxBodyBytes = 8192,
-  routerTimeoutMs = REQUEST_BUDGETS.routerMs + REQUEST_BUDGETS.cleanupMs, clearSettleMs = 60_000} = {}) {
+  routerTimeoutMs = REQUEST_BUDGETS.routerMs + REQUEST_BUDGETS.cleanupMs, clearSettleMs = 60_000,
+  onLocalShutdown = null} = {}) {
   if (typeof publicConnectionLookup !== 'function' || typeof localRouterNameLookup !== 'function' ||
       typeof relayProbe!=='function' || !driver || typeof driver.read !== 'function' || typeof driver.apply !== 'function' ||
       typeof dataDir !== 'string' || !dataDir || host !== '127.0.0.1' ||
@@ -341,7 +342,8 @@ export async function createManagerServer({driver, dataDir, host = '127.0.0.1', 
       !Number.isFinite(planTtlMs) || planTtlMs <= 0 ||
       !Number.isFinite(routerTimeoutMs) || routerTimeoutMs <= 0 ||
       !Number.isFinite(clearSettleMs) || clearSettleMs < 0 ||
-      !Number.isInteger(maxBodyBytes) || maxBodyBytes < 1 || maxBodyBytes > 8192) throw fault('BAD_REQUEST');
+      !Number.isInteger(maxBodyBytes) || maxBodyBytes < 1 || maxBodyBytes > 8192 ||
+      (onLocalShutdown !== null && typeof onLocalShutdown !== 'function')) throw fault('BAD_REQUEST');
   dataDir = path.resolve(dataDir);
   await fs.mkdir(dataDir, {recursive: true, mode: 0o700});
   const routerSettings = await createRouterSettings(dataDir);
@@ -352,7 +354,8 @@ export async function createManagerServer({driver, dataDir, host = '127.0.0.1', 
   // The cache is in-memory only and expires after 120 seconds.
   if (typeof driver.setRouterIp === 'function') driver.setRouterIp(routerSettings.get().routerIp);
   const lockPath = path.join(dataDir, 'instance.lock');
-  const lock = {pid: process.pid, startedAt: now(), instanceId: randomUUID()};
+  const lock = {pid: process.pid, startedAt: now(), instanceId: randomUUID(),
+    ...(onLocalShutdown ? {stopSecret: randomBytes(32).toString('hex')} : {})};
   try { await exclusiveJson(lockPath, lock); }
   catch (error) { throw fault(error?.code === 'EEXIST' ? 'LOCAL_LOCKED' : 'LOCAL_STORAGE', 503); }
   const operationsDir = path.join(dataDir, 'operations');
@@ -438,7 +441,7 @@ export async function createManagerServer({driver, dataDir, host = '127.0.0.1', 
   let lastLocalConnectFetchSite = null;
   let gatewayDetection = null;
   let lastRingTestAt = 0;
-  let stopping = false, closed = false, boundOrigin = `http://${host}:${port}`;
+  let stopping = false, closed = false, localStopAccepted = false, boundOrigin = `http://${host}:${port}`;
   const unresolved = () => [...operations.values()].some(op => op.status === 'reviewRequired' || op.status === 'running');
   const publicOperation = op => ({
     id: op.id, planId: op.planId, type: op.type, pattern: op.pattern, ruleId: op.ruleId ?? null,
@@ -908,6 +911,36 @@ export async function createManagerServer({driver, dataDir, host = '127.0.0.1', 
       if (req.headers['sec-fetch-site'] === 'cross-site' && !externalUserNavigation)
         denyGuard('FETCH_SITE');
       const route = url.pathname;
+      // Internal stop is a separate capability, not a browser CSRF action.
+      // The 256-bit secret exists only in the private instance.lock file.
+      // Do not allow browser-origin requests, cookies or request bodies here.
+      if (route === '/api/internal/stop') {
+        if (req.method !== 'POST' || !onLocalShutdown) throw fault('NOT_FOUND',404);
+        if (req.socket.remoteAddress !== '127.0.0.1' ||
+            req.headers.origin !== undefined ||
+            req.headers['sec-fetch-site'] !== undefined ||
+            req.headers.cookie !== undefined ||
+            req.headers['transfer-encoding'] !== undefined ||
+            req.headers['content-length'] !== '0' ||
+            typeof req.headers['x-ruxbox-stop-secret'] !== 'string' ||
+            !/^[a-f0-9]{64}$/.test(req.headers['x-ruxbox-stop-secret']) ||
+            !equalSecret(req.headers['x-ruxbox-stop-secret'], lock.stopSecret)) {
+          denyGuard('STOP_AUTH');
+        }
+        if (localStopAccepted || activeWork || jobs.size > 0 || reads.size > 0)
+          throw fault('BUSY',409);
+        localStopAccepted = true;
+        res.setHeader('Connection','close');
+        res.once('finish', () => setImmediate(() => {
+          Promise.resolve().then(onLocalShutdown).catch(() => {
+            // Do not retry or force-kill: an incomplete stop is uncertain.
+            console.error('No se pudo completar la parada segura.');
+            process.exitCode = 1;
+          });
+        }));
+        json(res,202,{status:'STOP_ACCEPTED',instanceId:lock.instanceId});
+        return;
+      }
       // A legacy session reaches only the routes its own adapter implements
       // (native contracts of the old firmware); blocking, DNS writes and the
       // polling monitor (one native login per poll) stay closed.
@@ -1498,10 +1531,12 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     const root = path.dirname(fileURLToPath(import.meta.url));
     const dataDir = path.join(root, 'data');
     await ensurePrivateDataDir(dataDir);
-    const manager = await createManagerServer({driver: new LiveboxDriver({root}), dataDir});
+    let manager;
+    const stop = async () => { await manager.close(); process.exit(0); };
+    manager = await createManagerServer({driver: new LiveboxDriver({root}),
+      dataDir, onLocalShutdown: stop});
     await manager.listen();
     console.log(`Gestor local disponible en ${manager.origin}`);
-    const stop = async () => { await manager.close(); process.exit(0); };
     process.once('SIGINT', stop); process.once('SIGTERM', stop);
   } catch (error) { console.error(messages[safeCode(error)]); process.exitCode = 1; }
 }

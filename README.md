@@ -28,3 +28,7 @@ El repositorio se ha creado de nuevo a partir del código de 0.4.25 sin incorpor
 El código propio se distribuye bajo GNU GPLv3; las dependencias incluidas mantienen sus licencias originales. Consulta LICENSE y THIRD_PARTY_NOTICES.md.
 
 RuxBox+ no es un producto oficial del operador. Las operaciones sobre el router deben comprobarse de acuerdo con el modelo y firmware autorizados; no se garantizan funciones no verificadas.
+
+## Apagado local
+
+RuxBox+ 0.4.26 incorpora PARAR.cmd en el paquete Windows, con parada autenticada local y bloqueo durante operaciones activas. No se fuerzan procesos externos.
