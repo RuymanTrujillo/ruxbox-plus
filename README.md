@@ -1,34 +1,90 @@
-# RuxBox+ 0.4.25
+# RuxBox+
 
-Administrador local e independiente para determinados routers Livebox. Proyecto no oficial de Orange ni de Jazztel, distribuido bajo GNU GPLv3 (GPL-3.0-only).
+RuxBox+ es una aplicación portátil para Windows que permite consultar y, cuando el firmware lo admite, gestionar funciones de telefonía y red de determinados routers Livebox desde una interfaz web local. El servidor se ejecuta en tu ordenador, no en el router.
 
-## Funciones
+[Descargar la última versión](https://github.com/RuymanTrujillo/ruxbox-plus/releases/latest) · [Versiones publicadas](https://github.com/RuymanTrujillo/ruxbox-plus/releases) · [Comunicar un problema](https://github.com/RuymanTrujillo/ruxbox-plus/issues)
 
-- Llamadas: historial, búsqueda y revisión.
-- Bloqueos: gestión de números exactos y simulación de reglas. El bloqueo por patrón de nueve posiciones es experimental.
-- DNS: lecturas y operaciones únicamente cuando el firmware y el controlador lo permiten.
-- Actividad y Ayuda: seguimiento y explicación de operaciones.
+## Qué puedes hacer
 
-**DynDNS no está implementado ni se muestra en la interfaz.** La compatibilidad y las capacidades varían por firmware. No se promete acceso a configuraciones SIP ni a funciones del operador que no estén acreditadas.
+| Sección | Funciones |
+| --- | --- |
+| **Llamadas** | Consultar el historial de llamadas entrantes, salientes y perdidas; buscar, filtrar y ordenar los registros disponibles. |
+| **Bloqueos** | Ver la lista de bloqueo, añadir o retirar números exactos y simular el alcance de una regla antes de aplicarla. |
+| **Telefonía** | Consultar o configurar el automarcado y realizar pruebas de timbre cuando la interfaz del router lo permita. |
+| **DNS** | Consultar los servidores DNS y, en firmwares compatibles, preparar y confirmar cambios. |
+| **Actividad** | Revisar las operaciones realizadas, sus resultados y los intentos que necesitan comprobación. |
+| **Configuración** | Establecer la dirección local del router o detectar la puerta de enlace del equipo. |
 
-## Descargar e iniciar
+Los avisos de llamadas se basan en **nuevos registros del historial** mientras la página está abierta; no detectan el timbrado en tiempo real.
 
-Descarga el ZIP Windows x64 de la [versión 0.4.25](https://github.com/RuymanTrujillo/ruxbox-plus/releases/tag/v0.4.25), comprueba su archivo SHA-256 y ejecútalo descomprimido en una carpeta local NTFS con permisos propios. Ejecuta primero VERIFICAR.cmd y después INICIAR.cmd. El gestor utiliza Node.js incluido en el paquete y se abre exclusivamente en 127.0.0.1:8765.
+## Compatibilidad y límites
 
-El ZIP no está firmado digitalmente por su autor. El hash comprueba integridad y no sustituye una firma de autenticidad. Solo introduce tu contraseña de administración en el gestor local.
+La compatibilidad depende de la **interfaz y el firmware**, no solo del nombre comercial del router. RuxBox+ comprueba los datos que recibe antes de habilitar operaciones de escritura.
 
-## Privacidad
+| Interfaz del router | Alcance |
+| --- | --- |
+| **Livebox 6 con el perfil de interfaz reconocido** | Consultas y operaciones disponibles según las comprobaciones de compatibilidad. Un cambio de estructura puede dejar funciones en modo lectura. |
+| **Livebox Fibra con interfaz antigua** | Diagnóstico y determinadas consultas en modo lectura. No se habilita una gestión de bloqueos que el firmware no acredite. |
+| **Otros modelos o versiones de firmware** | Compatibilidad no verificada; no se garantiza que todas las secciones funcionen. |
 
-La distribución **no incluye datos de un router, credenciales, cookies, sesiones, registros de llamadas ni configuraciones de usuario**. Esos datos se crean y conservan exclusivamente en el almacenamiento privado de cada instalación.
+Los bloqueos mediante **patrones de nueve posiciones** son experimentales. El simulador muestra coincidencias previstas, pero no demuestra que el firmware las aplique correctamente ni que bloquee la llamada antes del primer timbre.
 
-El repositorio se ha creado de nuevo a partir del código de 0.4.25 sin incorporar commits, etiquetas, ramas ni pruebas históricas que contengan números o IP de entornos de desarrollo. Las pruebas sintéticas internas no se publican para minimizar datos de ejemplo innecesarios. El código fuente ejecutable, los manifiestos de origen y la licencia se incluyen.
+**No incluye** acceso a credenciales SIP ni gestión DynDNS. Tampoco reemplaza el firmware ni el panel oficial del router.
 
-## Licencias y responsabilidades
+## Requisitos
 
-El código propio se distribuye bajo GNU GPLv3; las dependencias incluidas mantienen sus licencias originales. Consulta LICENSE y THIRD_PARTY_NOTICES.md.
+- **Windows x64** y una carpeta local en un volumen **NTFS** con permisos privados adecuados.
+- **Chrome, Brave o Edge** instalado en el equipo.
+- Acceso desde el ordenador a la interfaz de administración del router.
 
-RuxBox+ no es un producto oficial del operador. Las operaciones sobre el router deben comprobarse de acuerdo con el modelo y firmware autorizados; no se garantizan funciones no verificadas.
+El ZIP incluye Node.js y Playwright-core. **No es necesario instalar Node.js globalmente** ni ejecutar `npm install` para utilizar la distribución portátil.
 
-## Apagado local
+## Instalación
 
-RuxBox+ 0.4.26 incorpora PARAR.cmd en el paquete Windows, con parada autenticada local y bloqueo durante operaciones activas. No se fuerzan procesos externos.
+1. Descarga el archivo `RuxBoxPlus-*-win-x64.zip` y su correspondiente `SHA256.txt` desde la [última versión](https://github.com/RuymanTrujillo/ruxbox-plus/releases/latest).
+2. Comprueba que el SHA-256 del ZIP coincide con el del archivo de verificación. En PowerShell puedes obtenerlo con:
+
+   ```powershell
+   Get-FileHash .\RuxBoxPlus-*-win-x64.zip -Algorithm SHA256
+   ```
+
+3. Extrae **todo** el contenido del ZIP en una carpeta local. No ejecutes el programa desde el archivo comprimido ni modifiques los archivos del paquete.
+4. Ejecuta `VERIFICAR.cmd` y, si la comprobación termina correctamente, `INICIAR.cmd`.
+5. Abre **http://127.0.0.1:8765/** en el mismo ordenador. Desde **Configuración** puedes ajustar la IP del router si la detección automática no encuentra la correcta.
+
+Para consultar o modificar datos protegidos del router, inicia sesión desde el gestor con las credenciales de administración correspondientes. Las operaciones que alteran su configuración requieren comprobaciones y confirmación; su disponibilidad depende del firmware.
+
+### Detener el servidor
+
+Ejecuta **`PARAR.cmd`** desde la misma carpeta en la que instalaste RuxBox+ (disponible desde la versión 0.4.26).
+
+La parada identifica la instancia local, rechaza el cierre cuando existe una operación activa y comprueba que el servidor haya liberado su puerto y el bloqueo de instancia. No finaliza otros procesos Node.js. Para volver a abrir el gestor, ejecuta `INICIAR.cmd`.
+
+## Datos y seguridad
+
+- El panel escucha únicamente en **127.0.0.1:8765**. No necesitas abrir puertos en el router ni publicar el panel en Internet.
+- La contraseña de administración se mantiene en memoria durante la sesión local; no forma parte de la distribución.
+- Los ajustes y recibos de operaciones se conservan en **`manager/data/`**, un directorio privado de la instalación, excluido del inventario de archivos inmutables del paquete.
+- El ZIP publicado no contiene sesiones, historiales personales ni configuraciones de un router particular.
+
+**La distribución no está firmada digitalmente.** El SHA-256 sirve para comprobar que el archivo descargado no ha cambiado; por sí solo no acredita quién lo publicó.
+
+## Si algo falla
+
+| Síntoma | Qué comprobar |
+| --- | --- |
+| `VERIFICAR.cmd` falla | Vuelve a descargar y extraer el ZIP completo. No añadas ni edites archivos dentro del paquete; la configuración se realiza desde el gestor. |
+| El gestor no arranca | Comprueba que tienes Chrome, Brave o Edge y que el puerto local **8765** no está ocupado. La carpeta debe permitir el aislamiento de los datos privados. |
+| No se abre la página | Utiliza `http://127.0.0.1:8765/` **desde el equipo que ejecuta RuxBox+**. |
+| Una función aparece en modo lectura | La interfaz o el firmware no han superado las comprobaciones necesarias para habilitar esa operación. |
+| `PARAR.cmd` no consigue detenerlo | Revisa si hay trabajo activo o un cierre pendiente. No fuerces el proceso ni elimines `instance.lock` sin comprobar antes el estado de la instancia. |
+
+Para comunicar un fallo, abre una [incidencia en GitHub](https://github.com/RuymanTrujillo/ruxbox-plus/issues) con la versión de RuxBox+, el modelo y firmware del router, los pasos para reproducirlo y el mensaje de error. **No adjuntes contraseñas, cookies, exportaciones privadas, números de teléfono ni el contenido de `manager/data/`.**
+
+## Código fuente y licencia
+
+El código del servidor está en [`manager/`](manager/) y la interfaz en [`manager/public/`](manager/public/). Los binarios y dependencias necesarios para ejecutar la edición portátil se distribuyen con cada release de Windows.
+
+El código propio se publica bajo **[GNU GPLv3](LICENSE)**. Las dependencias y recursos de terceros conservan sus propias licencias y atribuciones, detalladas en [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+
+RuxBox+ es un proyecto independiente, sin relación oficial ni respaldo de Orange o Jazztel.
