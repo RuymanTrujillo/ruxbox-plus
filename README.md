@@ -33,8 +33,9 @@ Los bloqueos mediante **patrones de nueve posiciones** son experimentales. El si
 
 ## Requisitos
 
-- **Windows x64** y una carpeta local en un volumen **NTFS** con permisos privados adecuados.
-- **Chrome, Brave o Edge** instalado en el equipo.
+- **Windows x64**. La distribución portátil y sus lanzadores están preparados para Windows. **Linux no está soportado actualmente**.
+- Carpeta local donde el programa pueda comprobar los permisos del directorio privado `manager/data/`. La instalación se ha probado sobre **NTFS**, pero el código no exige expresamente ese sistema de archivos. Otros sistemas de archivos no están verificados.
+- **Chrome, Brave o Edge** instalado para la comunicación automatizada con el router, que utiliza Chromium mediante Playwright. **Firefox puede abrir la interfaz web local, pero no sustituye a esos navegadores**; la interfaz en Firefox no tiene todavía una validación funcional completa.
 - Acceso desde el ordenador a la interfaz de administración del router.
 
 El ZIP incluye Node.js y Playwright-core. **No es necesario instalar Node.js globalmente** ni ejecutar `npm install` para utilizar la distribución portátil.
@@ -67,14 +68,14 @@ La parada identifica la instancia local, rechaza el cierre cuando existe una ope
 - Los ajustes y recibos de operaciones se conservan en **`manager/data/`**, un directorio privado de la instalación, excluido del inventario de archivos inmutables del paquete.
 - El ZIP publicado no contiene sesiones, historiales personales ni configuraciones de un router particular.
 
-**La distribución no está firmada digitalmente.** El SHA-256 sirve para comprobar que el archivo descargado no ha cambiado; por sí solo no acredita quién lo publicó.
+**La distribución no está firmada digitalmente.**
 
 ## Si algo falla
 
 | Síntoma | Qué comprobar |
 | --- | --- |
 | `VERIFICAR.cmd` falla | Vuelve a descargar y extraer el ZIP completo. No añadas ni edites archivos dentro del paquete; la configuración se realiza desde el gestor. |
-| El gestor no arranca | Comprueba que tienes Chrome, Brave o Edge y que el puerto local **8765** no está ocupado. La carpeta debe permitir el aislamiento de los datos privados. |
+| El gestor no arranca | Comprueba que utilizas Windows x64, que hay Chrome, Brave o Edge instalado, que el puerto **8765** está libre y que los permisos de `manager/data/` se pueden verificar. Firefox por sí solo no sirve para automatizar el router. |
 | No se abre la página | Utiliza `http://127.0.0.1:8765/` **desde el equipo que ejecuta RuxBox+**. |
 | Una función aparece en modo lectura | La interfaz o el firmware no han superado las comprobaciones necesarias para habilitar esa operación. |
 | `PARAR.cmd` no consigue detenerlo | Revisa si hay trabajo activo o un cierre pendiente. No fuerces el proceso ni elimines `instance.lock` sin comprobar antes el estado de la instancia. |
